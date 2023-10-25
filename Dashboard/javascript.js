@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $.get("C:\Users\ckjar\Documents\GitHub\CS499-Project\Data\data.csv", function(data) {
+    $.get("CS499-Project/blob/master/Data/data.csv", function(data) {
         Papa.parse(data, {
             header: true,  // Treat the first row as the header
             dynamicTyping: true,  // Automatically detect data types
