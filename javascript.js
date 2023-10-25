@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $.get("Data/dashboard-data.csv", function(data) {
+    $.get("dashboard-data.csv", function(data) {
         Papa.parse(data, {
             header: true,  // Treat the first row as the header
             dynamicTyping: true,  // Automatically detect data types
