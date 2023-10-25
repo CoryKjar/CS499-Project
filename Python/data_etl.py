@@ -58,9 +58,11 @@ def process_data(raw_data_path, output_folder):
 
 
     # Calculate percent change for each state, excluding 2015_Q1
-    df['Max_Colonies_Percent_Change'] = df.groupby('State')['Max_Colonies'].pct_change().fillna(0) * 100
-    df.loc[df['Quarter'] == '2015_Q1', 'Max_Colonies_Percent_Change'] = 0
-
+   
+    # Calculate percent change for each state, excluding 2015_Q1
+    df = df.sort_values(by=['Quarter','State']).reset_index(drop=True)
+    df['PctChange'] = df.groupby('State')['Max_Colonies'].pct_change() * 100
+    df = df.round(1)
 
     # Calculate the percentage of colonies affected by Colony Collapse Disorder
     df['Pct_Affected_Colony_Collapse_Disorder'] = (df['Num_Affected_Colony_Collapse_Disorder'] / df['Max_Colonies']) * 100
@@ -73,12 +75,17 @@ def process_data(raw_data_path, output_folder):
 
     df = df.sort_values(by='Quarter', ascending=True)
 
+    # Create a copy of df and fill NaN values with 0
+    df2 = df.copy()
+    df2 = df2.fillna(0)
 
     # Define file paths using the output folder
-    state_file_path = os.path.join(output_folder, 'data.json')
+    data_path = os.path.join(output_folder, 'data.csv')
+    dashboard_data_path = os.path.join(output_folder, 'dashboard-data.csv')
 
     # Save data to CSV files
-    df.to_csv(state_file_path, index=False)
+    df.to_csv(data_path, index=False)
+    df2.to_csv(dashboard_data_path, index=False)
 
     print("Data Saved")
 
