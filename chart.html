@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Line Chart</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div>
+        <label for="state-dropdown">Select a State:</label>
+        <select id="state-dropdown"></select>
+    </div>
+    <div>
+        <label for="variable-dropdown">Select a Variable to Plot on the X-Axis:</label>
+        <select id="variable-dropdown"></select>
+    </div>
+    <div>
+        <canvas id="line-chart" width="800" height="400"></canvas>
+    </div>
+
+    <script>
+        var df; // Variable to hold CSV data
+
+        // Define the data
+        var data = {
+            labels: [],  // Will be populated based on user selection
+            datasets: [
+                {
+                    label: 'Data',
+                    data: [],  // Will be populated based on user selection
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }
+            ]
+        };
+
+        // Get references to the dropdowns and the chart canvas
+        var stateDropdown = document.getElementById('state-dropdown');
+        var variableDropdown = document.getElementById('variable-dropdown');
+        var chartCanvas = document.getElementById('line-chart').getContext('2d');
+
+        // Function to populate the dropdowns
+        function populateDropdowns() {
+            // Populate the state dropdown with options
+            var uniqueStates = Array.from(new Set(df.map(function (row) {
+                return row.State;
+            })));
+
+            uniqueStates.forEach(function (state) {
+                var option = document.createElement('option');
+                option.value = state;
+                option.text = state;
+                stateDropdown.appendChild(option);
+            });
+
+            // Populate the variable dropdown with options
+            var variableOptions = Object.keys(df[0]);
+
+            variableOptions.forEach(function (variable) {
+                var option = document.createElement('option');
+                option.value = variable;
+                option.text = variable;
+                variableDropdown.appendChild(option);
+            });
+        }
+
+        // Function to update the chart
+        function updateChart() {
+            // Retrieve selected state and variable
+            var selectedState = stateDropdown.value;
+            var selectedVariable = variableDropdown.value;
+
+            // Filter data based on the selected state
+            var filteredData = df.filter(function (row) {
+                return row.State === selectedState;
+            });
+
+            // Extract the Quarter and selected variable data
+            var quarterData = filteredData.map(function (row) {
+                return row.Quarter;
+            });
+
+            var variableData = filteredData.map(function (row) {
+                return row[selectedVariable];
+            });
+
+            // Update the chart data and labels
+            data.labels = quarterData;
+            data.datasets[0].data = variableData;
+
+            // Create or update the chart
+            if (window.chart) {
+                window.chart.data = data;
+                window.chart.update();
+            } else {
+                window.chart = new Chart(chartCanvas, {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Load and parse the CSV data
+        fetch('data.csv')
+            .then(response => response.text())
+            .then(data => {
+                // Parse the CSV data
+                var lines = data.trim().split('\n');
+                var headers = lines[0].split(',');
+                df = [];
+
+                for (var i = 1; i < lines.length; i++) {
+                    var obj = {};
+                    var currentLine = lines[i].split(',');
+
+                    for (var j = 0; j < headers.length; j++) {
+                        obj[headers[j]] = currentLine[j];
+                    }
+
+                    df.push(obj);
+                    console.log(df);
+                }
+
+                // Populate the dropdowns
+                populateDropdowns();
+
+                // Initialize the chart with the loaded data
+                updateChart();
+            })
+            .catch(error => {
+                console.error('Error loading CSV data:', error);
+            });
+    </script>
+</body>
+</html>
