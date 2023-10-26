@@ -18,22 +18,27 @@
     <script>
         var df_state = []; // To store CSV data
 
-        // Sample state and y_variable dropdown options
-        var states = ["State A", "State B", "State C"];
-        var variables = ["Variable 1", "Variable 2", "Variable 3"];
-
-        // Function to populate the state and variable dropdowns
-        function populateDropdowns() {
+        // Function to populate the state dropdown with unique state values from the CSV data
+        function populateStateDropdown() {
             var stateDropdown = document.getElementById("state-select");
-            var variableDropdown = document.getElementById("variable-select");
+            var uniqueStates = [...new Set(df_state.map(row => row.State))];
 
-            states.forEach(function (state) {
+            uniqueStates.forEach(function (state) {
                 var option = document.createElement("option");
                 option.text = state;
                 stateDropdown.add(option);
             });
+        }
 
-            variables.forEach(function (variable) {
+        // Function to populate the variable dropdown with variable names from the CSV data
+        function populateVariableDropdown() {
+            var variableDropdown = document.getElementById("variable-select");
+            var variableNames = Object.keys(df_state[0]);
+
+            // Remove 'Quarter' and 'State' columns from the dropdown options
+            var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
+
+            filteredVariables.forEach(function (variable) {
                 var option = document.createElement("option");
                 option.text = variable;
                 variableDropdown.add(option);
@@ -86,8 +91,9 @@
                 dynamicTyping: true,
                 complete: function(results) {
                     df_state = results.data;
-                    // Populate the dropdowns after parsing the data
-                    populateDropdowns();
+                    // Populate the state and variable dropdowns after parsing the data
+                    populateStateDropdown();
+                    populateVariableDropdown();
                     // Initial plot
                     updateLinePlot();
                 }
@@ -119,4 +125,3 @@
     </script>
 </body>
 </html>
-
