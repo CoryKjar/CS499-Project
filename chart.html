@@ -1,32 +1,122 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <div>
+        <label for="state-select">Select a State:</label>
+        <select id="state-select"></select>
+    </div>
+    <div>
+        <label for="variable-select">Select a Variable to Plot on the X-Axis:</label>
+        <select id="variable-select"></select>
+    </div>
+    <div id="line-plot"></div>
 
-  <head>
+    <script>
+        var df_state = []; // To store CSV data
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+        // Sample state and y_variable dropdown options
+        var states = ["State A", "State B", "State C"];
+        var variables = ["Variable 1", "Variable 2", "Variable 3"];
 
-    <title>Chart.js Tutorial</title>
+        // Function to populate the state and variable dropdowns
+        function populateDropdowns() {
+            var stateDropdown = document.getElementById("state-select");
+            var variableDropdown = document.getElementById("variable-select");
 
-    <!-- Chart.js import -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+            states.forEach(function (state) {
+                var option = document.createElement("option");
+                option.text = state;
+                stateDropdown.add(option);
+            });
 
-    <!-- Bootstrap core CSS-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            variables.forEach(function (variable) {
+                var option = document.createElement("option");
+                option.text = variable;
+                variableDropdown.add(option);
+            });
+        }
 
-    <!-- Bootstrap core JS-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js">
+        // Function to update the line plot
+        function updateLinePlot() {
+            var state = stateDropdown.value;
+            var variable = variableDropdown.value;
+            var df_state_filtered = df_state.filter(function (row) {
+                return row.State === state;
+            });
 
-  </head>
-  <div class="card mb-3">
-  <div class="card-header">
-    World population growth rate (%)
-  </div>
-  <div class="card-body">
-    <canvas id="line"></canvas>
-  </div>
-</div>
+            var x = df_state_filtered.map(function (row) {
+                return row.Quarter;
+            });
+
+            var y = df_state_filtered.map(function (row) {
+                return row[variable];
+            });
+
+            var trace = {
+                x: x,
+                y: y,
+                type: "scatter",
+                mode: "lines+markers",
+                name: `${variable} in ${state}`
+            };
+
+            var layout = {
+                title: `${variable} Over Time in ${state}`,
+                xaxis: {
+                    title: "Quarter"
+                },
+                yaxis: {
+                    title: variable
+                }
+            };
+
+            var data = [trace];
+
+            Plotly.newPlot("line-plot", data, layout);
+        }
+
+        // Function to parse CSV data
+        function parseCSVData(csvData) {
+            Papa.parse(csvData, {
+                header: true,
+                dynamicTyping: true,
+                complete: function(results) {
+                    df_state = results.data;
+                    // Populate the dropdowns after parsing the data
+                    populateDropdowns();
+                    // Initial plot
+                    updateLinePlot();
+                }
+            });
+        }
+
+        // Load data from "data.csv" using AJAX
+        function loadDataFromCSVFile() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "data.csv", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var csvData = xhr.responseText;
+                    parseCSVData(csvData);
+                }
+            };
+            xhr.send();
+        }
+
+        // Load data from "data.csv" when the page loads
+        loadDataFromCSVFile();
+
+        var stateDropdown = document.getElementById("state-select");
+        var variableDropdown = document.getElementById("variable-select");
+
+        // Event listeners to update the plot when dropdowns change
+        stateDropdown.addEventListener("change", updateLinePlot);
+        variableDropdown.addEventListener("change", updateLinePlot);
+    </script>
+</body>
+</html>
+
