@@ -1,32 +1,15 @@
 /* Add CSS for positioning the container div */
 .container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    min-height: 100vh;
 }
 
-/* Style for the line plot container */
-.line-plot-container {
-    padding: 10px;
+.line-plot-container, .second-plot-container {
+    flex: 1;
+    padding: 20px;
     border: 1px solid #ccc;
 }
 
-/* Style for the second plot container */
-.second-plot-container {
-    padding: 10px;
-    border: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-/* Style for labels */
-label {
-    font-weight: bold;
-}
-
-/* Style for dropdowns */
+/* Style for the dropdowns */
 select {
     width: 100%;
     padding: 10px;
@@ -34,18 +17,16 @@ select {
     font-size: 16px;
 }
 
-/* Style for plots */
+/* Style for the line plot and bar chart */
 #line-plot, #second-plot {
     width: 100%;
-    min-height: 400px;
+    min-height: 300px;
     border: 1px solid #ccc;
     background-color: #fff;
 }
 
-/* Style for the second plot (bar chart) */
-.second-plot {
-    width: 100%;
-    min-height: 400px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+/* Add any specific styles for the second plot, as needed */
+#second-plot {
+    /* Add your styles here */
+    margin-top: 14%;
 }
