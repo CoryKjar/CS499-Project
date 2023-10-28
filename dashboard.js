@@ -1,128 +1,62 @@
-// dashboard.js
+// interactive_lineplot.js
 
-var df_state = []; // To store CSV data
-
-function populateStateDropdown() {
-    var uniqueStates = [...new Set(df_state.map(row => row.State))];
-    var stateDropdownLine = document.getElementById("state-select-line");
-
-    stateDropdownLine.innerHTML = ""; // Clear the dropdown
-
-    uniqueStates.forEach(function (state) {
-        var optionLine = document.createElement("option");
-        optionLine.text = state;
-        stateDropdownLine.add(optionLine);
+// Function to update the line plot
+function updateLinePlot(state, y_variable) {
+    // Filter the data for the selected state
+    var df_state = df.filter(function (row) {
+        return row.State === state;
     });
-}
 
-function populateVariableDropdown() {
-    // Check if df_state is defined and not empty
-    if (df_state.length > 0) {
-        var variableNames = Object.keys(df_state[0]);
-
-        // Remove 'Quarter' and 'State' columns from the dropdown options
-        var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
-
-        var variableDropdownLine = document.getElementById("variable-select-line");
-        variableDropdownLine.innerHTML = ""; // Clear the dropdown
-
-        filteredVariables.forEach(function (variable) {
-            var optionLine = document.createElement("option");
-            optionLine.text = variable;
-            variableDropdownLine.add(optionLine);
-        });
-    }
-}
-
-function updateLinePlot() {
-    var state = document.getElementById("state-select-line").value;
-    var variable = document.getElementById("variable-select-line").value;
-
-    // Check if df_state is defined and not empty
-    if (df_state.length > 0) {
-        var df_state_filtered = df_state.filter(function (row) {
-            return row.State === state;
-        });
-
-        var x = df_state_filtered.map(function (row) {
-            return row.Quarter;
-        });
-
-        var y = df_state_filtered.map(function (row) {
-            return row[variable];
-        });
-
-        var lineChart = new Chart(document.getElementById("line-chart").getContext("2d"), {
-            type: "line",
-            data: {
-                labels: x,
-                datasets: [
-                    {
-                        label: `${variable} in ${state}`,
-                        data: y,
-                        borderColor: "blue",
-                        backgroundColor: "rgba(0, 0, 255, 0.2)"
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    xAxes: [
-                        {
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Quarter"
-                            }
-                        }
-                    ],
-                    yAxes: [
-                        {
-                            scaleLabel: {
-                                display: true,
-                                labelString: variable
-                            }
-                        }
-                    ]
-                }
-            }
-        });
-    }
-}
-
-// Function to parse CSV data
-function parseCSVData(csvData) {
-    Papa.parse(csvData, {
-        header: true,
-        dynamicTyping: true,
-        complete: function(results) {
-            df_state = results.data;
-            // Populate the state and variable dropdowns after parsing the data
-            populateStateDropdown();
-            populateVariableDropdown();
-        }
+    // Extract x and y data
+    var x = df_state.map(function (row) {
+        return row.Quarter;
     });
-}
 
-// Load data from "data.csv" using AJAX
-function loadDataFromCSVFile() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "data.csv", true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var csvData = xhr.responseText;
-            parseCSVData(csvData);
-        }
+    var y = df_state.map(function (row) {
+        return row[y_variable];
+    });
+
+    // Create a Plotly line plot
+    var trace = {
+        x: x,
+        y: y,
+        mode: 'lines',
+        name: y_variable,
     };
-    xhr.send();
+
+    var data = [trace];
+
+    var layout = {
+        title: `${y_variable} Over Time in ${state}`,
+        xaxis: {
+            title: 'Quarter',
+            tickangle: -45,
+        },
+        yaxis: {
+            title: y_variable,
+        },
+    };
+
+    Plotly.newPlot('line-plot', data, layout);
 }
 
-// Load data from "data.csv" when the page loads
-loadDataFromCSVFile();
+// Event listener for state and y_variable dropdowns
+var stateDropdown = document.getElementById('state-dropdown');
+var yVariableDropdown = document.getElementById('y-variable-dropdown');
 
-// Event listeners to update the chart when dropdowns change
-document.getElementById("state-select-line").addEventListener("change", updateLinePlot);
-document.getElementById("variable-select-line").addEventListener("change", updateLinePlot);
+stateDropdown.addEventListener('change', function () {
+    var state = stateDropdown.value;
+    var y_variable = yVariableDropdown.value;
+    updateLinePlot(state, y_variable);
+});
 
-// Call the initial update functions to populate dropdowns and charts
-populateStateDropdown();
-populateVariableDropdown();
+yVariableDropdown.addEventListener('change', function () {
+    var state = stateDropdown.value;
+    var y_variable = yVariableDropdown.value;
+    updateLinePlot(state, y_variable);
+});
+
+// Initial update of the plot
+var initialState = df[0].State; // You can set an initial state
+var initialYVariable = df.columns[2]; // You can set an initial y variable
+updateLinePlot(initialState, initialYVariable);
