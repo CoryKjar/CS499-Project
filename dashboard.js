@@ -100,7 +100,7 @@ function updateLinePlot() {
 // Function to update the bar chart
 function updateBarChart() {
     var stateDropdown = document.getElementById("state-dropdown");
-    var variableDropdown = document.getElementById("variable-dropdown");
+    var variableDropdown = document.getElementById("y-variable-dropdown");
     var selectedState = stateDropdown.value;
     var selectedVariable = variableDropdown.value;
 
