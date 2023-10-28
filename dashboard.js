@@ -95,10 +95,12 @@ function updateLinePlot() {
     Plotly.newPlot('line-plot', data, layout);
 }
 function updateBarChart() {
-
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
     var selectedVariable = barChartVariableDropdown.value;
     console.log("Selected Variable:", selectedVariable);
+
+    // Call populateDropdowns to populate the bar-chart-variable-dropdown
+    populateDropdowns();
 
     // Calculate the mean of the selected variable for each state
     var meanValues = df.reduce(function(result, row) {
