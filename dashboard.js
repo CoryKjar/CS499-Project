@@ -13,17 +13,17 @@ var lineChart = new Chart(document.getElementById("line-chart").getContext("2d")
     },
     options: {
         scales: {
-            x: [
+            xAxes: [
                 {
-                    title: {
+                    scaleLabel: {
                         display: true,
-                        text: "Quarter"
+                        labelString: "Quarter"
                     }
                 }
             ],
-            y: [
+            yAxes: [
                 {
-                    title: {
+                    scaleLabel: {
                         display: true
                     }
                 }
@@ -81,56 +81,65 @@ function populateStateDropdown() {
 
 // Function to populate the variable dropdown with variable names from the CSV data
 function populateVariableDropdown() {
-    var variableNames = Object.keys(df_state[0]);
+    // Check if df_state is defined and not empty
+    if (df_state.length > 0) {
+        var variableNames = Object.keys(df_state[0]);
 
-    // Remove 'Quarter' and 'State' columns from the dropdown options
-    var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
+        // Remove 'Quarter' and 'State' columns from the dropdown options
+        var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
 
-    variableDropdownLine.innerHTML = ""; // Clear the dropdown
-    variableDropdownBar.innerHTML = ""; // Clear the dropdown
+        variableDropdownLine.innerHTML = ""; // Clear the dropdown
+        variableDropdownBar.innerHTML = ""; // Clear the dropdown
 
-    filteredVariables.forEach(function (variable) {
-        var optionLine = document.createElement("option");
-        var optionBar = document.createElement("option");
-        optionLine.text = variable;
-        optionBar.text = variable;
-        variableDropdownLine.add(optionLine);
-        variableDropdownBar.add(optionBar);
-    });
-    updateLinePlot(); // Update the chart after populating the dropdown
+        filteredVariables.forEach(function (variable) {
+            var optionLine = document.createElement("option");
+            var optionBar = document.createElement("option");
+            optionLine.text = variable;
+            optionBar.text = variable;
+            variableDropdownLine.add(optionLine);
+            variableDropdownBar.add(optionBar);
+        });
+        updateLinePlot(); // Update the chart after populating the dropdown
+    }
 }
+
 
 
 // Function to update the line plot
 function updateLinePlot() {
     var state = stateDropdownLine.value;
     var variable = variableDropdownLine.value;
-    var df_state_filtered = df_state.filter(function (row) {
-        return row.State === state;
-    });
 
-    var x = df_state_filtered.map(function (row) {
-        return row.Quarter;
-    });
+    // Check if df_state is defined and not empty
+    if (df_state.length > 0) {
+        var df_state_filtered = df_state.filter(function (row) {
+            return row.State === state;
+        });
 
-    var y = df_state_filtered.map(function (row) {
-        return row[variable];
-    });
+        var x = df_state_filtered.map(function (row) {
+            return row.Quarter;
+        });
 
-    lineChart.data.labels = x;
-    lineChart.data.datasets = [
-        {
-            label: `${variable} in ${state}`,
-            data: y,
-            borderColor: "blue",
-            backgroundColor: "rgba(0, 0, 255, 0.2)"
-        }
-    ];
+        var y = df_state_filtered.map(function (row) {
+            return row[variable];
+        });
 
-    lineChart.options.scales.x[0].title.text = "Quarter";
-    lineChart.options.scales.y[0].title.text = variable;
-    lineChart.update();
+        lineChart.data.labels = x;
+        lineChart.data.datasets = [
+            {
+                label: `${variable} in ${state}`,
+                data: y,
+                borderColor: "blue",
+                backgroundColor: "rgba(0, 0, 255, 0.2)"
+            }
+        ];
+
+        lineChart.options.scales.xAxes[0].scaleLabel.labelString = "Quarter";
+        lineChart.options.scales.yAxes[0].scaleLabel.labelString = variable;
+        lineChart.update();
+    }
 }
+
 
 // Function to update the bar chart
 function updateBarChart() {
