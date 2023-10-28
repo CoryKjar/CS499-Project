@@ -60,8 +60,14 @@ var barChart = new Chart(document.getElementById("bar-chart").getContext("2d"), 
 });
 
 // Function to populate the state dropdown with unique state values from the CSV data
+// Update the populateStateDropdown and populateVariableDropdown functions as follows:
+
+// Function to populate the state dropdown with unique state values from the CSV data
 function populateStateDropdown() {
     var uniqueStates = [...new Set(df_state.map(row => row.State))];
+
+    stateDropdownLine.innerHTML = ""; // Clear the dropdown
+    stateDropdownBar.innerHTML = ""; // Clear the dropdown
 
     uniqueStates.forEach(function (state) {
         var optionLine = document.createElement("option");
@@ -71,7 +77,6 @@ function populateStateDropdown() {
         stateDropdownLine.add(optionLine);
         stateDropdownBar.add(optionBar);
     });
-    updateLinePlot(); // Update the chart after populating the dropdown
 }
 
 // Function to populate the variable dropdown with variable names from the CSV data
@@ -80,6 +85,9 @@ function populateVariableDropdown() {
 
     // Remove 'Quarter' and 'State' columns from the dropdown options
     var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
+
+    variableDropdownLine.innerHTML = ""; // Clear the dropdown
+    variableDropdownBar.innerHTML = ""; // Clear the dropdown
 
     filteredVariables.forEach(function (variable) {
         var optionLine = document.createElement("option");
@@ -91,6 +99,7 @@ function populateVariableDropdown() {
     });
     updateLinePlot(); // Update the chart after populating the dropdown
 }
+
 
 // Function to update the line plot
 function updateLinePlot() {
