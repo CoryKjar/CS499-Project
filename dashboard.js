@@ -48,17 +48,9 @@ function populateDropdowns() {
         yVariableDropdown.appendChild(option);
     });
 
-    // Add variables to the bar chart variable dropdown
-    filteredVariables.forEach(function(variable) {
-        var option = document.createElement("option");
-        option.value = variable;
-        option.text = variable;
-        barChartVariableDropdown.appendChild(option);
-    });
-
     // Initialize the plot with default values
     updateLinePlot();
-    updateBarChart();
+    populateBarChartDropdown(); // Populate the bar chart dropdown
 }
 
 // Function to update the line plot
@@ -105,13 +97,11 @@ function updateLinePlot() {
 
     Plotly.newPlot('line-plot', data, layout);
 }
+
 function updateBarChart() {
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
     var selectedVariable = barChartVariableDropdown.value;
     console.log("Selected Variable:", selectedVariable);
-
-    // Call populateDropdowns to populate the bar-chart-variable-dropdown
-    populateDropdowns();
 
     // Calculate the mean of the selected variable for each state
     var meanValues = df.reduce(function(result, row) {
@@ -161,6 +151,22 @@ function updateBarChart() {
     console.log("Bar chart updated.");
 }
 
+// New function to populate only the bar chart dropdown
+function populateBarChartDropdown() {
+    var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
+
+    // Get variable names
+    var variableNames = Object.keys(df[0]);
+    var filteredVariables = variableNames.filter(name => name !== "Quarter" && name !== "State");
+
+    // Add variables to the bar chart variable dropdown
+    filteredVariables.forEach(function(variable) {
+        var option = document.createElement("option");
+        option.value = variable;
+        option.text = variable;
+        barChartVariableDropdown.appendChild(option);
+    });
+}
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
@@ -176,3 +182,6 @@ yVariableDropdown.addEventListener("change", updateLinePlot);
 // Event listener for bar chart variable dropdown
 var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
 barChartVariableDropdown.addEventListener("change", updateBarChart);
+
+// Call populateBarChartDropdown() to populate the bar chart dropdown when the page loads
+populateBarChartDropdown();
