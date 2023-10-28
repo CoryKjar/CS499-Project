@@ -95,38 +95,37 @@ function updateLinePlot() {
     Plotly.newPlot('line-plot', data, layout);
 }
 function updateBarChart() {
-    var stateDropdown = document.getElementById("state-dropdown");
-    var yVariableDropdown = document.getElementById("y-variable-dropdown");
-    var selectedState = stateDropdown.value;
     var selectedVariable = yVariableDropdown.value;
 
-    // Filter the data for the selected state
-    var df_state = df.filter(function(row) {
-        return row.State === selectedState;
-    });
-
     // Calculate the mean of the selected variable for each state
-    var meanValues = df_state.reduce(function(result, row) {
+    var meanValues = df.reduce(function(result, row) {
         result[row.State] = result[row.State] || { total: 0, count: 0 };
         result[row.State].total += row[selectedVariable];
         result[row.State].count += 1;
         return result;
     }, {});
 
-    var states = Object.keys(meanValues);
-    var meanData = states.map(function(state) {
+    // Calculate the average and sort by the highest average
+    var sortedStates = Object.keys(meanValues).sort(function (a, b) {
+        return meanValues[b].total / meanValues[b].count - meanValues[a].total / meanValues[a].count;
+    });
+
+    // Select the top 10 states
+    var topStates = sortedStates.slice(0, 10);
+
+    var topStatesData = topStates.map(function(state) {
         return meanValues[state].total / meanValues[state].count;
     });
 
-    // Create a Plotly bar chart
+    // Create a Plotly bar chart for the top 10 states
     var data = [{
-        x: states,
-        y: meanData,
+        x: topStates,
+        y: topStatesData,
         type: 'bar',
     }];
 
     var layout = {
-        title: `Average ${selectedVariable} by State`,
+        title: `Top 10 States by Highest Average ${selectedVariable}`,
         xaxis: {
             title: 'State',
         },
