@@ -99,71 +99,60 @@ function updateLinePlot() {
 
 // Function to update the bar chart
 function updateBarChart() {
-    var yVariableDropdown = document.getElementById("y-variable-dropdown");
-    var selectedVariable = yVariableDropdown.value;
+    var stateDropdown = document.getElementById("state-dropdown");
+    var variableDropdown = document.getElementById("variable-dropdown");
+    var selectedState = stateDropdown.value;
+    var selectedVariable = variableDropdown.value;
 
-    // Filter the data
-    var filteredData = df.filter(function(row) {
-        return row.State !== 'US TOTAL';
+    // Filter the data for the selected state
+    var df_state = df.filter(function(row) {
+        return row.State === selectedState;
     });
 
-    // Group by state and calculate the mean of the selected variable
-    var meanData = d3.nest()
-        .key(function(d) { return d.State; })
-        .rollup(function(v) { return d3.mean(v, function(d) { return d[selectedVariable]; }); })
-        .entries(filteredData);
+    // Calculate the mean of the selected variable for each state
+    var meanValues = df_state.reduce(function(result, row) {
+        result[row.State] = result[row.State] || { total: 0, count: 0 };
+        result[row.State].total += row[selectedVariable];
+        result[row.State].count += 1;
+        return result;
+    }, {});
 
-    // Sort by mean value
-    meanData.sort(function(a, b) {
-        return b.value - a.value;
+    var states = Object.keys(meanValues);
+    var meanData = states.map(function(state) {
+        return meanValues[state].total / meanValues[state].count;
     });
 
-    // Get top N states
-    var topN = meanData.slice(0, 10);
-
-    var stateNames = topN.map(function(d) {
-        return d.key;
-    });
-
-    var meanValues = topN.map(function(d) {
-        return d.value;
-    });
-
-    var barData = [
-        {
-            x: stateNames,
-            y: meanValues,
-            type: 'bar'
-        }
-    ];
-
-    var barLayout = {
-        title: `Top 10 States by Highest Avg ${selectedVariable}`,
-        xaxis: {
-            title: 'State',
-            tickangle: -45
-        },
-        yaxis: {
-            title: `Avg ${selectedVariable}`
-        }
+    // Create a Plotly bar chart
+    var trace = {
+        x: states,
+        y: meanData,
+        type: 'bar',
     };
 
-    // Create or update the bar chart
-    if (barChart) {
-        Plotly.newPlot('bar-plot', barData, barLayout);
-    } else {
-        barChart = Plotly.newPlot('bar-plot', barData, barLayout);
-    }
+    var data = [trace];
+
+    var layout = {
+        title: `Average ${selectedVariable} by State`,
+        xaxis: {
+            title: 'State',
+        },
+        yaxis: {
+            title: 'Average ' + selectedVariable,
+        },
+    };
+
+    Plotly.newPlot('bar-chart', data, layout);
 }
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
 
 // Event listener for state dropdown
+// Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
 stateDropdown.addEventListener("change", updateLinePlot);
 
 // Event listener for variable dropdown
-var yVariableDropdown = document.getElementById("y-variable-dropdown");
-yVariableDropdown.addEventListener("change", updateLinePlot);
-yVariableDropdown.addEventListener("change", updateBarChart); // Update the bar chart on variable change
+var variableDropdown = document.getElementById("variable-dropdown");
+variableDropdown.addEventListener("change", updateLinePlot);
+variableDropdown.addEventListener("change", updateBarChart); // Update both line and bar charts on variable change
