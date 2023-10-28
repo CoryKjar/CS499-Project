@@ -10,11 +10,11 @@
         <select id="state-select"></select>
     </div>
     <div>
-        <label for="variable-select">Select a Variable to Plot on the X-Axis:</label>
+        <label for="variable-select">Select a Variable:</label>
         <select id="variable-select"></select>
     </div>
     <div id="line-plot"></div>
-    <div id="bar-chart"></div>
+    <div id="bar-plot"></div>
 
     <script>
         var df_state = []; // To store CSV data
@@ -85,50 +85,35 @@
             Plotly.newPlot("line-plot", data, layout);
         }
 
-        // Function to parse CSV data
-        function parseCSVData(csvData) {
-            Papa.parse(csvData, {
-                header: true,
-                dynamicTyping: true,
-                complete: function(results) {
-                    df_state = results.data;
-                    // Populate the state and variable dropdowns after parsing the data
-                    populateStateDropdown();
-                    populateVariableDropdown();
-                    // Initial plot
-                    updateLinePlot();
-                    updateBarChart();
-                }
-            });
-        }
-
+        // Function to update the bar chart
         function updateBarChart() {
-            var state = stateDropdown.value;
             var variable = variableDropdown.value;
-            var df_state_filtered = df_state.filter(function (row) {
-                return row.State === state;
+            var topN = 10; // Set the number of top states you want to display
+
+            // Sort the data based on the selected variable and take the top N states
+            var sortedData = df_state.slice().sort(function(a, b) {
+                return b[variable] - a[variable];
+            }).slice(0, topN);
+
+            var x = sortedData.map(function(row) {
+                return row.State;
             });
 
-            var x = df_state_filtered.map(function (row) {
-                return row.Quarter;
-            });
-
-            var y = df_state_filtered.map(function (row) {
+            var y = sortedData.map(function(row) {
                 return row[variable];
             });
 
             var trace = {
                 x: x,
                 y: y,
-                type: "scatter",
-                mode: "lines+markers",
-                name: `${variable} in ${state}`
+                type: "bar",
+                name: `Top ${topN} States by Highest Avg ${variable}`
             };
 
             var layout = {
-                title: `${variable} Over Time in ${state}`,
+                title: `Top ${topN} States by Highest Avg ${variable}`,
                 xaxis: {
-                    title: "Quarter"
+                    title: "State"
                 },
                 yaxis: {
                     title: variable
@@ -137,7 +122,7 @@
 
             var data = [trace];
 
-            Plotly.newPlot("bar-chart", data, layout);
+            Plotly.newPlot("bar-plot", data, layout);
         }
 
         // Function to parse CSV data
@@ -150,7 +135,7 @@
                     // Populate the state and variable dropdowns after parsing the data
                     populateStateDropdown();
                     populateVariableDropdown();
-                    // Initial plot
+                    // Initial plots
                     updateLinePlot();
                     updateBarChart();
                 }
@@ -176,10 +161,9 @@
         var stateDropdown = document.getElementById("state-select");
         var variableDropdown = document.getElementById("variable-select");
 
-        // Event listeners to update the plot when dropdowns change
+        // Event listeners to update the plots when dropdowns change
         stateDropdown.addEventListener("change", updateLinePlot);
         variableDropdown.addEventListener("change", updateLinePlot);
-        stateDropdown.addEventListener("change", updateBarChart);
         variableDropdown.addEventListener("change", updateBarChart);
     </script>
 </body>
