@@ -5,6 +5,60 @@ var variableDropdownLine = document.getElementById("variable-select-line");
 var stateDropdownBar = document.getElementById("state-select-bar");
 var variableDropdownBar = document.getElementById("variable-select-bar");
 
+var lineChart = new Chart(document.getElementById("line-chart").getContext("2d"), {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+        scales: {
+            x: [
+                {
+                    title: {
+                        display: true,
+                        text: "Quarter"
+                    }
+                }
+            ],
+            y: [
+                {
+                    title: {
+                        display: true
+                    }
+                }
+            ]
+        }
+    }
+});
+
+var barChart = new Chart(document.getElementById("bar-chart").getContext("2d"), {
+    type: "bar",
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+        scales: {
+            x: [
+                {
+                    title: {
+                        display: true,
+                        text: "State"
+                    }
+                }
+            ],
+            y: [
+                {
+                    title: {
+                        display: true
+                    }
+                }
+            ]
+        }
+    }
+});
+
 // Function to populate the state dropdown with unique state values from the CSV data
 function populateStateDropdown() {
     var uniqueStates = [...new Set(df_state.map(row => row.State))];
@@ -52,27 +106,19 @@ function updateLinePlot() {
         return row[variable];
     });
 
-    var trace = {
-        x: x,
-        y: y,
-        type: "scatter",
-        mode: "lines+markers",
-        name: `${variable} in ${state}`
-    };
-
-    var layout = {
-        title: `${variable} Over Time in ${state}`,
-        xaxis: {
-            title: "Quarter"
-        },
-        yaxis: {
-            title: variable
+    lineChart.data.labels = x;
+    lineChart.data.datasets = [
+        {
+            label: `${variable} in ${state}`,
+            data: y,
+            borderColor: "blue",
+            backgroundColor: "rgba(0, 0, 255, 0.2)"
         }
-    };
+    ];
 
-    var data = [trace];
-
-    Plotly.newPlot("line-plot", data, layout);
+    lineChart.options.scales.x[0].title.text = "Quarter";
+    lineChart.options.scales.y[0].title.text = variable;
+    lineChart.update();
 }
 
 // Function to update the bar chart
@@ -94,27 +140,19 @@ function updateBarChart() {
         return row[variable];
     });
 
-    var trace = {
-        x: x,
-        y: y,
-        type: "bar",
-        name: `Top ${topN} States by Highest Avg ${variable}`
-    };
-
-    var layout = {
-        title: `Top ${topN} States by Highest Avg ${variable}`,
-        xaxis: {
-            title: "State"
-        },
-        yaxis: {
-            title: variable
+    barChart.data.labels = x;
+    barChart.data.datasets = [
+        {
+            label: `Top ${topN} States by Highest Avg ${variable}`,
+            data: y,
+            backgroundColor: "rgba(0, 0, 255, 0.2)"
         }
-        };
+    ];
 
-        var data = [trace];
-
-        Plotly.newPlot("bar-plot", data, layout);
-    }
+    barChart.options.scales.x[0].title.text = "State";
+    barChart.options.scales.y[0].title.text = variable;
+    barChart.update();
+}
 
 // Function to parse CSV data
 function parseCSVData(csvData) {

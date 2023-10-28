@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="styles.css"> <!-- Include your CSS file -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
     <div id="line-plot">
@@ -11,12 +11,14 @@
             <label for="state-select-line">Select a State (Line Plot):</label>
             <select id="state-select-line"></select>
         </div>
+        
         <div>
             <label for="variable-select-line">Select a Variable (Line Plot):</label>
             <select id="variable-select-line"></select>
         </div>
+        <canvas id="line-chart"></canvas> <!-- Canvas for Line Chart -->
     </div>
-    
+
     <div id="bar-plot">
         <div>
             <label for="state-select-bar">Select a State (Bar Chart):</label>
@@ -26,8 +28,8 @@
             <label for="variable-select-bar">Select a Variable (Bar Chart):</label>
             <select id="variable-select-bar"></select>
         </div>
+        <canvas id="bar-chart"></canvas> <!-- Canvas for Bar Chart -->
     </div>
-    
 
     <script src="dashboard.js"></script>
 </body>
