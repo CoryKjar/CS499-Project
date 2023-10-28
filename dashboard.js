@@ -18,10 +18,12 @@ function loadDataAndParseCSV() {
 function populateDropdowns() {
     var stateDropdown = document.getElementById("state-dropdown");
     var yVariableDropdown = document.getElementById("y-variable-dropdown");
+    var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
 
     // Clear existing options
     stateDropdown.innerHTML = "";
     yVariableDropdown.innerHTML = "";
+    barChartVariableDropdown.innerHTML = "";
 
     // Get unique states
     var uniqueStates = [...new Set(df.map(row => row.State))];
@@ -38,12 +40,20 @@ function populateDropdowns() {
     var variableNames = Object.keys(df[0]);
     var filteredVariables = variableNames.filter(name => name !== "Quarter" && name !== "State");
 
-    // Add variables to the variable dropdown
+    // Add variables to the line plot variable dropdown
     filteredVariables.forEach(function(variable) {
         var option = document.createElement("option");
         option.value = variable;
         option.text = variable;
         yVariableDropdown.appendChild(option);
+    });
+
+    // Add variables to the bar chart variable dropdown
+    filteredVariables.forEach(function(variable) {
+        var option = document.createElement("option");
+        option.value = variable;
+        option.text = variable;
+        barChartVariableDropdown.appendChild(option);
     });
 
     // Initialize the plot with default values
