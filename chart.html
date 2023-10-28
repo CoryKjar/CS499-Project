@@ -5,29 +5,18 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
+    <!-- Create state dropdown -->
+    <label for="state-dropdown">Select a State:</label>
+    <select id="state-dropdown"></select>
+
+    <!-- Create variable dropdown -->
+    <label for="y-variable-dropdown">Select a Variable:</label>
+    <select id="y-variable-dropdown"></select>
+
     <!-- Create a div for the line plot -->
     <div id="line-plot"></div>
 
-    <!-- Create state and y_variable dropdowns -->
-    <label for="state-dropdown">Select a State:</label>
-    <select id="state-dropdown">
-        <!-- Populate options dynamically if needed -->
-        <option value="State1">State 1</option>
-        <option value="State2">State 2</option>
-        <option value="State3">State 3</option>
-        <!-- Add more states as needed -->
-    </select>
-
-    <label for="y-variable-dropdown">Select a Variable to Plot on the X-Axis:</label>
-    <select id="y-variable-dropdown">
-        <!-- Populate options dynamically if needed -->
-        <option value="Variable1">Variable 1</option>
-        <option value="Variable2">Variable 2</option>
-        <option value="Variable3">Variable 3</option>
-        <!-- Add more variables as needed -->
-    </select>
-
     <!-- Include your interactive_lineplot.js file -->
-    <script src="dashboard.js"></script>
+    <script src="interactive_lineplot.js"></script>
 </body>
 </html>
