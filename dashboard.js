@@ -17,10 +17,7 @@ function populateVariableDropdown() {
     var variableDropdown = document.getElementById("variable-select");
     var variableNames = Object.keys(df_state[0]);
 
-    // Remove 'Quarter' and 'State' columns from the dropdown options
-    var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
-
-    filteredVariables.forEach(function (variable) {
+    variableNames.forEach(function (variable) {
         var option = document.createElement("option");
         option.text = variable;
         variableDropdown.add(option);
@@ -99,12 +96,12 @@ function updateBarChart() {
         yaxis: {
             title: variable
         }
-    };
+        };
 
-    var data = [trace];
+        var data = [trace];
 
-    Plotly.newPlot("bar-plot", data, layout);
-}
+        Plotly.newPlot("bar-plot", data, layout);
+    }
 
 // Function to parse CSV data
 function parseCSVData(csvData) {
