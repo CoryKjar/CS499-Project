@@ -1,5 +1,6 @@
 var df; // To store the CSV data
 var selectedTopOption = "highest"; // Default to highest
+var selectedTimeFrame = "all-time"; // Default to all time
 
 // Function to load CSV data and parse it
 function loadDataAndParseCSV() {
@@ -108,13 +109,22 @@ function updateLinePlot() {
 }
 
 // Function to update the bar chart
-// Function to update the bar chart
 function updateBarChart() {
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
     var selectedVariable = barChartVariableDropdown.value;
 
+    // Filter the data based on the selected time frame
+    var filteredData = df.filter(function(row) {
+        if (selectedTimeFrame === "last-4-quarters") {
+            return row.Quarter >= "Q3 2022"; // Change to the appropriate starting quarter
+        } else if (selectedTimeFrame === "last-quarter") {
+            return row.Quarter >= "Q4 2022"; // Change to the appropriate starting quarter
+        }
+        return true; // "All Time" includes all data
+    });
+
     // Calculate the mean of the selected variable for each state
-    var meanValues = df.reduce(function(result, row) {
+    var meanValues = filteredData.reduce(function(result, row) {
         if (row.State !== "US TOTAL") { // Exclude "US TOTAL"
             result[row.State] = result[row.State] || { total: 0, count: 0 };
             result[row.State].total += row[selectedVariable];
@@ -149,7 +159,7 @@ function updateBarChart() {
     }];
 
     var layout = {
-        title: `Top 10 States by ${selectedTopOption} Average ${selectedVariable}`,
+        title: `Top 10 States by ${selectedTopOption} Average ${selectedVariable} (${selectedTimeFrame})`,
         xaxis: {
             title: 'State',
         },
@@ -178,6 +188,13 @@ barChartVariableDropdown.addEventListener("change", updateBarChart);
 var topSelector = document.getElementById("top-selector");
 topSelector.addEventListener("change", function() {
     selectedTopOption = topSelector.value;
+    updateBarChart();
+});
+
+// Event listener for time frame selector dropdown
+var timeFrameSelector = document.getElementById("time-frame-selector");
+timeFrameSelector.addEventListener("change", function() {
+    selectedTimeFrame = timeFrameSelector.value;
     updateBarChart();
 });
 
