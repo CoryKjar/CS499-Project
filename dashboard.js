@@ -10,6 +10,7 @@ function loadDataAndParseCSV() {
             // Store the parsed data in the df variable
             df = results.data;
             populateDropdowns();
+            updateBarChart(); // Call updateBarChart when data is loaded
         }
     });
 }
@@ -48,9 +49,16 @@ function populateDropdowns() {
         yVariableDropdown.appendChild(option);
     });
 
+    // Add variables to the bar chart variable dropdown
+    filteredVariables.forEach(function(variable) {
+        var option = document.createElement("option");
+        option.value = variable;
+        option.text = variable;
+        barChartVariableDropdown.appendChild(option);
+    });
+
     // Initialize the plot with default values
     updateLinePlot();
-    populateBarChartDropdown(); // Populate the bar chart dropdown
 }
 
 // Function to update the line plot
