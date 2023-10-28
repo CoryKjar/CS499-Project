@@ -1,4 +1,4 @@
-var df; // To store the CSV data
+        var df; // To store the CSV data
 
         // Function to load CSV data and parse it
         function loadDataAndParseCSV() {
@@ -97,3 +97,11 @@ var df; // To store the CSV data
 
         // Load CSV data and parse it when the page loads
         loadDataAndParseCSV();
+
+        // Event listener for state dropdown
+        var stateDropdown = document.getElementById("state-dropdown");
+        stateDropdown.addEventListener("change", updateLinePlot);
+
+        // Event listener for variable dropdown
+        var yVariableDropdown = document.getElementById("y-variable-dropdown");
+        yVariableDropdown.addEventListener("change", updateLinePlot);
