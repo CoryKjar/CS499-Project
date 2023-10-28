@@ -1,5 +1,4 @@
 var df; // To store the CSV data
-var barChart;
 
 // Function to load CSV data and parse it
 function loadDataAndParseCSV() {
@@ -49,7 +48,6 @@ function populateDropdowns() {
 
     // Initialize the plot with default values
     updateLinePlot();
-    updateBarChart(); // Initialize the bar chart
 }
 
 // Function to update the line plot
@@ -97,62 +95,14 @@ function updateLinePlot() {
     Plotly.newPlot('line-plot', data, layout);
 }
 
-// Function to update the bar chart
-function updateBarChart() {
-    var stateDropdown = document.getElementById("state-dropdown");
-    var variableDropdown = document.getElementById("y-variable-dropdown");
-    var selectedState = stateDropdown.value;
-    var selectedVariable = variableDropdown.value;
-
-    // Filter the data for the selected state
-    var df_state = df.filter(function(row) {
-        return row.State === selectedState;
-    });
-
-    // Calculate the mean of the selected variable for each state
-    var meanValues = df_state.reduce(function(result, row) {
-        result[row.State] = result[row.State] || { total: 0, count: 0 };
-        result[row.State].total += row[selectedVariable];
-        result[row.State].count += 1;
-        return result;
-    }, {});
-
-    var states = Object.keys(meanValues);
-    var meanData = states.map(function(state) {
-        return meanValues[state].total / meanValues[state].count;
-    });
-
-    // Create a Plotly bar chart
-    var trace = {
-        x: states,
-        y: meanData,
-        type: 'bar',
-    };
-
-    var data = [trace];
-
-    var layout = {
-        title: `Average ${selectedVariable} by State`,
-        xaxis: {
-            title: 'State',
-        },
-        yaxis: {
-            title: 'Average ' + selectedVariable,
-        },
-    };
-
-    Plotly.newPlot('bar-chart', data, layout);
-}
-
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
 
-// Event listener for state dropdown
 // Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
 stateDropdown.addEventListener("change", updateLinePlot);
 
 // Event listener for variable dropdown
-var variableDropdown = document.getElementById("y-variable-dropdown");
-variableDropdown.addEventListener("change", updateLinePlot);
-variableDropdown.addEventListener("change", updateBarChart); // Update both line and bar charts on variable change
+var yVariableDropdown = document.getElementById("y-variable-dropdown");
+yVariableDropdown.addEventListener("change", updateLinePlot);
+
