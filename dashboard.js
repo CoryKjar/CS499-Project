@@ -153,6 +153,6 @@ var stateDropdown = document.getElementById("state-dropdown");
 stateDropdown.addEventListener("change", updateLinePlot);
 
 // Event listener for variable dropdown
-var variableDropdown = document.getElementById("variable-dropdown");
+var variableDropdown = document.getElementById("y-variable-dropdown");
 variableDropdown.addEventListener("change", updateLinePlot);
 variableDropdown.addEventListener("change", updateBarChart); // Update both line and bar charts on variable change
