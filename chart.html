@@ -14,6 +14,7 @@
         <select id="variable-select"></select>
     </div>
     <div id="line-plot"></div>
+    <div id="bar-chart"></div>
 
     <script>
         var df_state = []; // To store CSV data
@@ -96,6 +97,62 @@
                     populateVariableDropdown();
                     // Initial plot
                     updateLinePlot();
+                    updateBarChart();
+                }
+            });
+        }
+
+        function updateBarChart() {
+            var state = stateDropdown.value;
+            var variable = variableDropdown.value;
+            var df_state_filtered = df_state.filter(function (row) {
+                return row.State === state;
+            });
+
+            var x = df_state_filtered.map(function (row) {
+                return row.Quarter;
+            });
+
+            var y = df_state_filtered.map(function (row) {
+                return row[variable];
+            });
+
+            var trace = {
+                x: x,
+                y: y,
+                type: "scatter",
+                mode: "lines+markers",
+                name: `${variable} in ${state}`
+            };
+
+            var layout = {
+                title: `${variable} Over Time in ${state}`,
+                xaxis: {
+                    title: "Quarter"
+                },
+                yaxis: {
+                    title: variable
+                }
+            };
+
+            var data = [trace];
+
+            Plotly.newPlot("bar-chart", data, layout);
+        }
+
+        // Function to parse CSV data
+        function parseCSVData(csvData) {
+            Papa.parse(csvData, {
+                header: true,
+                dynamicTyping: true,
+                complete: function(results) {
+                    df_state = results.data;
+                    // Populate the state and variable dropdowns after parsing the data
+                    populateStateDropdown();
+                    populateVariableDropdown();
+                    // Initial plot
+                    updateLinePlot();
+                    updateBarChart();
                 }
             });
         }
@@ -122,6 +179,8 @@
         // Event listeners to update the plot when dropdowns change
         stateDropdown.addEventListener("change", updateLinePlot);
         variableDropdown.addEventListener("change", updateLinePlot);
+        stateDropdown.addEventListener("change", updateBarChart);
+        variableDropdown.addEventListener("change", updateBarChart);
     </script>
 </body>
 </html>
