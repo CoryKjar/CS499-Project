@@ -1,6 +1,8 @@
 var df; // To store the CSV data
 var selectedTopOption = "highest"; // Default to highest
 var selectedTimeFrame = "all-time"; // Default to all time
+var lastFourQuarters = []; // Store the last four quarters
+var lastQuarter = ""; // Store the last quarter
 
 // Function to load CSV data and parse it
 function loadDataAndParseCSV() {
@@ -12,6 +14,7 @@ function loadDataAndParseCSV() {
             // Store the parsed data in the df variable
             df = results.data;
             populateDropdowns();
+            updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
         }
     });
@@ -116,9 +119,9 @@ function updateBarChart() {
     // Filter the data based on the selected time frame
     var filteredData = df.filter(function(row) {
         if (selectedTimeFrame === "last-4-quarters") {
-            return row.Quarter >= "Q3 2022"; // Change to the appropriate starting quarter
+            return lastFourQuarters.includes(row.Quarter);
         } else if (selectedTimeFrame === "last-quarter") {
-            return row.Quarter >= "Q4 2022"; // Change to the appropriate starting quarter
+            return row.Quarter === lastQuarter;
         }
         return true; // "All Time" includes all data
     });
@@ -170,6 +173,22 @@ function updateBarChart() {
 
     // Update the "second-plot" div with the bar chart
     Plotly.newPlot('second-plot', data, layout);
+}
+
+// Function to update the available time frames based on the unique values in the Quarter column
+function updateTimeFrames() {
+    var uniqueQuarters = [...new Set(df.map(row => row.Quarter))];
+
+    // Sort quarters in descending order (latest first)
+    uniqueQuarters.sort(function(a, b) {
+        return new Date(b) - new Date(a);
+    });
+
+    // Get the last four quarters
+    lastFourQuarters = uniqueQuarters.slice(0, 4);
+
+    // Get the last quarter
+    lastQuarter = uniqueQuarters[0];
 }
 
 // Event listener for state dropdown
