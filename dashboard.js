@@ -173,6 +173,7 @@ function parseCSVData(csvData) {
         dynamicTyping: true,
         complete: function(results) {
             df_state = results.data;
+            console.log(df_state)
             // Populate the state and variable dropdowns after parsing the data
             populateStateDropdown();
             populateVariableDropdown();
