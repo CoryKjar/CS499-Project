@@ -1,8 +1,5 @@
 var df_state = []; // To store CSV data
 
-var stateDropdown = document.getElementById("state-select");
-var variableDropdown = document.getElementById("variable-select");
-
 // Function to populate the state dropdown with unique state values from the CSV data
 function populateStateDropdown() {
     var stateDropdown = document.getElementById("state-select");
@@ -19,9 +16,6 @@ function populateStateDropdown() {
 function populateVariableDropdown() {
     var variableDropdown = document.getElementById("variable-select");
     var variableNames = Object.keys(df_state[0]);
-
-    // Clear existing options
-    variableDropdown.innerHTML = "";
 
     // Remove 'Quarter' and 'State' columns from the dropdown options
     var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
@@ -144,6 +138,9 @@ function loadDataFromCSVFile() {
 
 // Load data from "data.csv" when the page loads
 loadDataFromCSVFile();
+
+var stateDropdown = document.getElementById("state-select");
+var variableDropdown = document.getElementById("variable-select");
 
 // Event listeners to update the plots when dropdowns change
 stateDropdown.addEventListener("change", updateLinePlot);
