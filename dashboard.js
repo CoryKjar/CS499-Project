@@ -94,6 +94,50 @@ function updateLinePlot() {
 
     Plotly.newPlot('line-plot', data, layout);
 }
+function updateBarChart() {
+    var stateDropdown = document.getElementById("state-dropdown");
+    var yVariableDropdown = document.getElementById("y-variable-dropdown");
+    var selectedState = stateDropdown.value;
+    var selectedVariable = yVariableDropdown.value;
+
+    // Filter the data for the selected state
+    var df_state = df.filter(function(row) {
+        return row.State === selectedState;
+    });
+
+    // Calculate the mean of the selected variable for each state
+    var meanValues = df_state.reduce(function(result, row) {
+        result[row.State] = result[row.State] || { total: 0, count: 0 };
+        result[row.State].total += row[selectedVariable];
+        result[row.State].count += 1;
+        return result;
+    }, {});
+
+    var states = Object.keys(meanValues);
+    var meanData = states.map(function(state) {
+        return meanValues[state].total / meanValues[state].count;
+    });
+
+    // Create a Plotly bar chart
+    var data = [{
+        x: states,
+        y: meanData,
+        type: 'bar',
+    }];
+
+    var layout = {
+        title: `Average ${selectedVariable} by State`,
+        xaxis: {
+            title: 'State',
+        },
+        yaxis: {
+            title: 'Average ' + selectedVariable,
+        },
+    };
+
+    // Update the "second-plot" div with the bar chart
+    Plotly.newPlot('second-plot', data, layout);
+}
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
