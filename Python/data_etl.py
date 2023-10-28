@@ -57,28 +57,28 @@ def process_data(raw_data_path, output_folder):
     df = df[['Quarter'] + [col for col in df.columns if col != 'Quarter']]
 
 
+    # Calculate the sum of 'Max_Colonies' for each quarter for 'US TOTAL'
+    quarterly_sums = df.groupby('Quarter')['Max_Colonies'].sum()
+    for quarter, sum_value in quarterly_sums.items():
+        df.loc[(df['State'] == 'US TOTAL') & (df['Quarter'] == quarter), 'Max_Colonies'] = sum_value
+
+
     # Calculate percent change for each state, excluding 2015_Q1
-    df['Max_Colonies_Percent_Change'] = df.groupby('State')['Max_Colonies'].pct_change().fillna(0) * 100
-    df.loc[df['Quarter'] == '2015_Q1', 'Max_Colonies_Percent_Change'] = 0
+    df.sort_values(by=['State', 'Quarter'], inplace=True)
+    df['prev_max_colonies'] = df.groupby('State')['Max_Colonies'].shift(1)
+    df['Max_Colonies_Pct_Change'] = (df['Max_Colonies'] - df['prev_max_colonies']) / df['prev_max_colonies'] * 100
+    df.drop(columns=['prev_max_colonies'], inplace=True)
 
 
     # Calculate the percentage of colonies affected by Colony Collapse Disorder
     df['Pct_Affected_Colony_Collapse_Disorder'] = (df['Num_Affected_Colony_Collapse_Disorder'] / df['Max_Colonies']) * 100
     df = df.drop(columns=['Num_Affected_Colony_Collapse_Disorder', 'Period', 'Year'])
 
-    # Calculate the sum of 'Max_Colonies' for each quarter for 'US TOTAL'
-    quarterly_sums = df.groupby('Quarter')['Max_Colonies'].sum()
-    for quarter, sum_value in quarterly_sums.items():
-        df.loc[(df['State'] == 'US TOTAL') & (df['Quarter'] == quarter), 'Max_Colonies'] = sum_value
-
-    df = df.sort_values(by='Quarter', ascending=True)
-
-
     # Define file paths using the output folder
-    state_file_path = os.path.join(output_folder, 'data.json')
+    file_path = os.path.join(output_folder, 'data.csv')
 
     # Save data to CSV files
-    df.to_csv(state_file_path, index=False)
+    df.to_csv(file_path, index=False)
 
     print("Data Saved")
 
