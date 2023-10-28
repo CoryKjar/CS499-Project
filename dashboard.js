@@ -165,6 +165,7 @@ function updateBarChart() {
     barChart.update();
 }
 
+
 // Function to parse CSV data
 function parseCSVData(csvData) {
     Papa.parse(csvData, {
@@ -200,3 +201,7 @@ stateDropdownLine.addEventListener("change", updateLinePlot);
 variableDropdownLine.addEventListener("change", updateLinePlot);
 stateDropdownBar.addEventListener("change", updateBarChart);
 variableDropdownBar.addEventListener("change", updateBarChart);
+
+// Call the initial update functions to populate dropdowns and charts
+populateStateDropdown();
+populateVariableDropdown();
