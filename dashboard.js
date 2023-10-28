@@ -8,6 +8,7 @@ function loadDataAndParseCSV() {
             // Store the parsed data in the df variable
             df = results.data;
             populateDropdowns();
+            console.log(df)
         }
     });
 }
