@@ -1,4 +1,5 @@
 var df; // To store the CSV data
+var selectedTopOption = "highest"; // Default to highest
 
 // Function to load CSV data and parse it
 function loadDataAndParseCSV() {
@@ -106,10 +107,10 @@ function updateLinePlot() {
     Plotly.newPlot('line-plot', data, layout);
 }
 
+// Function to update the bar chart
 function updateBarChart() {
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
     var selectedVariable = barChartVariableDropdown.value;
-    console.log("Selected Variable:", selectedVariable);
 
     // Calculate the mean of the selected variable for each state
     var meanValues = df.reduce(function(result, row) {
@@ -118,33 +119,34 @@ function updateBarChart() {
         result[row.State].count += 1;
         return result;
     }, {});
-    console.log("Mean Values:", meanValues);
 
-    // Calculate the average and sort by the highest average
+    // Sort states based on the selected top option (highest or lowest)
     var sortedStates = Object.keys(meanValues).sort(function (a, b) {
-        return meanValues[b].total / meanValues[b].count - meanValues[a].total / meanValues[a].count;
+        var aValue = meanValues[a].total / meanValues[a].count;
+        var bValue = meanValues[b].total / meanValues[b].count;
+        if (selectedTopOption === "highest") {
+            return bValue - aValue; // Highest
+        } else {
+            return aValue - bValue; // Lowest
+        }
     });
-    console.log("Sorted States:", sortedStates);
 
-    // Select the top 10 states
+    // Select the top 10 or lowest 10 states
     var topStates = sortedStates.slice(0, 10);
-    console.log("Top 10 States:", topStates);
 
     var topStatesData = topStates.map(function(state) {
         return meanValues[state].total / meanValues[state].count;
     });
-    console.log("Top States Data:", topStatesData);
 
-    // Create a Plotly bar chart for the top 10 states
+    // Create a Plotly bar chart for the top 10 or lowest 10 states
     var data = [{
         x: topStates,
         y: topStatesData,
         type: 'bar',
     }];
-    console.log("Chart Data:", data);
 
     var layout = {
-        title: `Top 10 States by Highest Average ${selectedVariable}`,
+        title: `Top 10 States by ${selectedTopOption} Average ${selectedVariable}`,
         xaxis: {
             title: 'State',
         },
@@ -152,32 +154,10 @@ function updateBarChart() {
             title: 'Average ' + selectedVariable,
         },
     };
-    console.log("Layout:", layout);
 
     // Update the "second-plot" div with the bar chart
     Plotly.newPlot('second-plot', data, layout);
-    console.log("Bar chart updated.");
 }
-
-// New function to populate only the bar chart dropdown
-function populateBarChartDropdown() {
-    var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
-
-    // Get variable names
-    var variableNames = Object.keys(df[0]);
-    var filteredVariables = variableNames.filter(name => name !== "Quarter" && name !== "State");
-
-    // Add variables to the bar chart variable dropdown
-    filteredVariables.forEach(function(variable) {
-        var option = document.createElement("option");
-        option.value = variable;
-        option.text = variable;
-        barChartVariableDropdown.appendChild(option);
-    });
-}
-
-// Load CSV data and parse it when the page loads
-loadDataAndParseCSV();
 
 // Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
@@ -191,5 +171,12 @@ yVariableDropdown.addEventListener("change", updateLinePlot);
 var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
 barChartVariableDropdown.addEventListener("change", updateBarChart);
 
-// Call populateBarChartDropdown() to populate the bar chart dropdown when the page loads
-populateBarChartDropdown();
+// Event listener for top selector dropdown
+var topSelector = document.getElementById("top-selector");
+topSelector.addEventListener("change", function() {
+    selectedTopOption = topSelector.value;
+    updateBarChart();
+});
+
+// Load CSV data and parse it when the page loads
+loadDataAndParseCSV();
