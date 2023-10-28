@@ -1,37 +1,45 @@
-
 var df_state = []; // To store CSV data
+
+var stateDropdownLine = document.getElementById("state-select-line");
+var variableDropdownLine = document.getElementById("variable-select-line");
+var stateDropdownBar = document.getElementById("state-select-bar");
+var variableDropdownBar = document.getElementById("variable-select-bar");
 
 // Function to populate the state dropdown with unique state values from the CSV data
 function populateStateDropdown() {
-    var stateDropdown = document.getElementById("state-select");
     var uniqueStates = [...new Set(df_state.map(row => row.State))];
 
     uniqueStates.forEach(function (state) {
-        var option = document.createElement("option");
-        option.text = state;
-        stateDropdown.add(option);
+        var optionLine = document.createElement("option");
+        var optionBar = document.createElement("option");
+        optionLine.text = state;
+        optionBar.text = state;
+        stateDropdownLine.add(optionLine);
+        stateDropdownBar.add(optionBar);
     });
 }
 
 // Function to populate the variable dropdown with variable names from the CSV data
 function populateVariableDropdown() {
-    var variableDropdown = document.getElementById("variable-select");
     var variableNames = Object.keys(df_state[0]);
 
     // Remove 'Quarter' and 'State' columns from the dropdown options
     var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
 
     filteredVariables.forEach(function (variable) {
-        var option = document.createElement("option");
-        option.text = variable;
-        variableDropdown.add(option);
+        var optionLine = document.createElement("option");
+        var optionBar = document.createElement("option");
+        optionLine.text = variable;
+        optionBar.text = variable;
+        variableDropdownLine.add(optionLine);
+        variableDropdownBar.add(optionBar);
     });
 }
 
 // Function to update the line plot
 function updateLinePlot() {
-    var state = stateDropdown.value;
-    var variable = variableDropdown.value;
+    var state = stateDropdownLine.value;
+    var variable = variableDropdownLine.value;
     var df_state_filtered = df_state.filter(function (row) {
         return row.State === state;
     });
@@ -69,7 +77,8 @@ function updateLinePlot() {
 
 // Function to update the bar chart
 function updateBarChart() {
-    var variable = variableDropdown.value;
+    var state = stateDropdownBar.value;
+    var variable = variableDropdownBar.value;
     var topN = 10; // Set the number of top states you want to display
 
     // Sort the data based on the selected variable and take the top N states
@@ -100,12 +109,12 @@ function updateBarChart() {
         yaxis: {
             title: variable
         }
-    };
+        };
 
-    var data = [trace];
+        var data = [trace];
 
-    Plotly.newPlot("bar-plot", data, layout);
-}
+        Plotly.newPlot("bar-plot", data, layout);
+    }
 
 // Function to parse CSV data
 function parseCSVData(csvData) {
@@ -140,10 +149,8 @@ function loadDataFromCSVFile() {
 // Load data from "data.csv" when the page loads
 loadDataFromCSVFile();
 
-var stateDropdown = document.getElementById("state-select");
-var variableDropdown = document.getElementById("variable-select");
-
 // Event listeners to update the plots when dropdowns change
-stateDropdown.addEventListener("change", updateLinePlot);
-variableDropdown.addEventListener("change", updateLinePlot);
-variableDropdown.addEventListener("change", updateBarChart);
+stateDropdownLine.addEventListener("change", updateLinePlot);
+variableDropdownLine.addEventListener("change", updateLinePlot);
+stateDropdownBar.addEventListener("change", updateBarChart);
+variableDropdownBar.addEventListener("change", updateBarChart);
