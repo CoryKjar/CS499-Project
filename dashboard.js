@@ -1,7 +1,6 @@
 var df; // To store the CSV data
 
 // Function to load CSV data and parse it
-// Function to load CSV data and parse it
 function loadDataAndParseCSV() {
     Papa.parse("data.csv", {
         header: true,
