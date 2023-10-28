@@ -149,4 +149,5 @@ stateDropdown.addEventListener("change", updateLinePlot);
 // Event listener for variable dropdown
 var yVariableDropdown = document.getElementById("y-variable-dropdown");
 yVariableDropdown.addEventListener("change", updateLinePlot);
+yVariableDropdown.addEventListener("change", updateBarChart);
 
