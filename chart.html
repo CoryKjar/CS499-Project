@@ -5,21 +5,18 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!-- Include the PapaParse library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-
 </head>
 <body>
+    <!-- Create state dropdown -->
+    <label for="state-dropdown">Select a State:</label>
+    <select id="state-dropdown"></select>
+
+    <!-- Create variable dropdown -->
+    <label for="y-variable-dropdown">Select a Variable:</label>
+    <select id="y-variable-dropdown"></select>
 
     <!-- Create a div for the line plot -->
-    <div id="line-plot">
-            <!-- Create state dropdown -->
-        <label for="state-dropdown">Select a State:</label>
-        <select id="state-dropdown"></select>
-
-        <!-- Create variable dropdown -->
-        <label for="y-variable-dropdown">Select a Variable:</label>
-        <select id="y-variable-dropdown"></select>
-    </div>
+    <div id="line-plot"></div>
 
     <!-- Include your dashboard.js file -->
     <script src="dashboard.js"></script>
