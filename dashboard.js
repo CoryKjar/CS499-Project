@@ -71,6 +71,7 @@ function populateStateDropdown() {
         stateDropdownLine.add(optionLine);
         stateDropdownBar.add(optionBar);
     });
+    updateLinePlot(); // Update the chart after populating the dropdown
 }
 
 // Function to populate the variable dropdown with variable names from the CSV data
@@ -88,6 +89,7 @@ function populateVariableDropdown() {
         variableDropdownLine.add(optionLine);
         variableDropdownBar.add(optionBar);
     });
+    updateLinePlot(); // Update the chart after populating the dropdown
 }
 
 // Function to update the line plot
@@ -164,9 +166,6 @@ function parseCSVData(csvData) {
             // Populate the state and variable dropdowns after parsing the data
             populateStateDropdown();
             populateVariableDropdown();
-            // Initial plots
-            updateLinePlot();
-            updateBarChart();
         }
     });
 }
@@ -187,7 +186,7 @@ function loadDataFromCSVFile() {
 // Load data from "data.csv" when the page loads
 loadDataFromCSVFile();
 
-// Event listeners to update the plots when dropdowns change
+// Event listeners to update the charts when dropdowns change
 stateDropdownLine.addEventListener("change", updateLinePlot);
 variableDropdownLine.addEventListener("change", updateLinePlot);
 stateDropdownBar.addEventListener("change", updateBarChart);
