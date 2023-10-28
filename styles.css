@@ -9,7 +9,8 @@ body {
 
 #line-plot, #bar-plot {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
     margin: 20px;
     padding: 20px;
     background-color: #ffffff;
@@ -25,23 +26,24 @@ label {
 select {
     width: 200px;
     padding: 5px;
-    margin-right: 20px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
 }
 
 #line-plot select, #bar-plot select {
-    margin-bottom: 10px;
+    width: 200px;
+    margin-right: 0;
 }
 
 #line-plot label, #bar-plot label {
     display: block;
 }
 
-#line-plot div, #bar-plot div {
-    margin-bottom: 10px;
+#bar-plot {
+    margin-left: 20px;
 }
 
-#line-plot select:last-child, #bar-plot select:last-child {
-    margin-right: 0;
+.user-select-none.svg-container {
+    height: 600px;
 }
