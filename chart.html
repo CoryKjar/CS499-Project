@@ -13,22 +13,47 @@
             position: absolute;
             top: 0;
             left: 0;
+            display: flex;
+        }
+
+        .line-plot-container {
+            flex: 1;
+        }
+
+        .second-plot-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .second-plot {
+            width: 80%;
+            /* Add other CSS styles for the second plot as needed */
         }
     </style>
 </head>
 <body>
     <!-- Create a container div for the line plot and dropdowns -->
     <div class="container">
-        <!-- Create state dropdown -->
-        <label for="state-dropdown">Select a State:</label>
-        <select id="state-dropdown"></select>
+        <div class="line-plot-container">
+            <!-- Create state dropdown -->
+            <label for="state-dropdown">Select a State:</label>
+            <select id="state-dropdown"></select>
 
-        <!-- Create variable dropdown -->
-        <label for="y-variable-dropdown">Select a Variable:</label>
-        <select id="y-variable-dropdown"></select>
+            <!-- Create variable dropdown -->
+            <label for="y-variable-dropdown">Select a Variable:</label>
+            <select id="y-variable-dropdown"></select>
 
-        <!-- Create a div for the line plot -->
-        <div id="line-plot"></div>
+            <!-- Create a div for the line plot -->
+            <div id="line-plot"></div>
+        </div>
+
+        <div class="second-plot-container">
+            <!-- Create a div for the second plot -->
+            <div class="second-plot" id="second-plot"></div>
+            <!-- Add other content or plots here -->
+        </div>
     </div>
 
     <!-- Include your dashboard.js file -->
