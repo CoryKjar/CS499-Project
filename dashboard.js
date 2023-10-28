@@ -1,5 +1,8 @@
 var df_state = []; // To store CSV data
 
+var stateDropdown = document.getElementById("state-select");
+var variableDropdown = document.getElementById("variable-select");
+
 // Function to populate the state dropdown with unique state values from the CSV data
 function populateStateDropdown() {
     var stateDropdown = document.getElementById("state-select");
@@ -17,7 +20,13 @@ function populateVariableDropdown() {
     var variableDropdown = document.getElementById("variable-select");
     var variableNames = Object.keys(df_state[0]);
 
-    variableNames.forEach(function (variable) {
+    // Clear existing options
+    variableDropdown.innerHTML = "";
+
+    // Remove 'Quarter' and 'State' columns from the dropdown options
+    var filteredVariables = variableNames.filter(name => name !== 'Quarter' && name !== 'State');
+
+    filteredVariables.forEach(function (variable) {
         var option = document.createElement("option");
         option.text = variable;
         variableDropdown.add(option);
@@ -96,12 +105,12 @@ function updateBarChart() {
         yaxis: {
             title: variable
         }
-        };
+    };
 
-        var data = [trace];
+    var data = [trace];
 
-        Plotly.newPlot("bar-plot", data, layout);
-    }
+    Plotly.newPlot("bar-plot", data, layout);
+}
 
 // Function to parse CSV data
 function parseCSVData(csvData) {
@@ -135,9 +144,6 @@ function loadDataFromCSVFile() {
 
 // Load data from "data.csv" when the page loads
 loadDataFromCSVFile();
-
-var stateDropdown = document.getElementById("state-select");
-var variableDropdown = document.getElementById("variable-select");
 
 // Event listeners to update the plots when dropdowns change
 stateDropdown.addEventListener("change", updateLinePlot);
