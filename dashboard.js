@@ -95,7 +95,9 @@ function updateLinePlot() {
     Plotly.newPlot('line-plot', data, layout);
 }
 function updateBarChart() {
-    var selectedVariable = yVariableDropdown.value;
+
+    var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
+    var selectedVariable = barChartVariableDropdown.value;
     console.log("Selected Variable:", selectedVariable);
 
     // Calculate the mean of the selected variable for each state
@@ -157,5 +159,7 @@ stateDropdown.addEventListener("change", updateLinePlot);
 // Event listener for variable dropdown
 var yVariableDropdown = document.getElementById("y-variable-dropdown");
 yVariableDropdown.addEventListener("change", updateLinePlot);
-yVariableDropdown.addEventListener("change", updateBarChart);
 
+// Event listener for bar chart variable dropdown
+var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
+barChartVariableDropdown.addEventListener("change", updateBarChart);
