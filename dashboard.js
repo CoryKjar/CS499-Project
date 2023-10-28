@@ -108,15 +108,18 @@ function updateLinePlot() {
 }
 
 // Function to update the bar chart
+// Function to update the bar chart
 function updateBarChart() {
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
     var selectedVariable = barChartVariableDropdown.value;
 
     // Calculate the mean of the selected variable for each state
     var meanValues = df.reduce(function(result, row) {
-        result[row.State] = result[row.State] || { total: 0, count: 0 };
-        result[row.State].total += row[selectedVariable];
-        result[row.State].count += 1;
+        if (row.State !== "US TOTAL") { // Exclude "US TOTAL"
+            result[row.State] = result[row.State] || { total: 0, count: 0 };
+            result[row.State].total += row[selectedVariable];
+            result[row.State].count += 1;
+        }
         return result;
     }, {});
 
