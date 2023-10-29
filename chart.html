@@ -10,37 +10,31 @@
     <style>
         /* Add CSS for positioning the container div */
         .container {
-            position: absolute;
-            top: 0;
-            left: 0;
             display: flex;
+            height: 100vh; /* Make the container take up the full viewport height */
         }
 
-        .line-plot-container {
-            flex: 1;
-        }
-
-        .second-plot-container {
-            flex: 1;
+        .plot-container {
+            flex: 1; /* Each plot section takes up equal space */
+            padding: 20px; /* Add padding for spacing */
+            border: 1px solid #ccc;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center; /* Center the content horizontally */
+            justify-content: center; /* Center the content vertically */
         }
 
-        .second-plot {
-            width: 80%;
-            /* Add other CSS styles for the second plot as needed */
-        }
-        
-        .third-plot {
-            flex: 1; /* Third plot section takes up equal space */
+        .plot {
+            width: 80%; /* Adjust the width as needed */
+            min-height: 400px;
+            /* Add other CSS styles for the plots as needed */
         }
     </style>
 </head>
 <body>
-    <!-- Create a container div for the line plot and dropdowns -->
+    <!-- Create a container div for the plots -->
     <div class="container">
-        <div class="line-plot-container">
+        <div class="plot-container">
             <!-- Create state dropdown -->
             <label for="state-dropdown">Select a State:</label>
             <select id="state-dropdown"></select>
@@ -50,10 +44,10 @@
             <select id="y-variable-dropdown"></select>
 
             <!-- Create a div for the line plot -->
-            <div id="line-plot"></div>
+            <div class="plot" id="line-plot"></div>
         </div>
 
-        <div class="second-plot-container">
+        <div class="plot-container">
             <!-- Create variable dropdown for the bar chart -->
             <label for="bar-chart-variable-dropdown">Select a Variable for Bar Chart:</label>
             <select id="bar-chart-variable-dropdown"></select>
@@ -74,14 +68,14 @@
             </select>
 
             <!-- Create a div for the bar chart -->
-            <div class="second-plot" id="second-plot"></div>
+            <div class="plot" id="second-plot"></div>
             <!-- Add other content or plots here -->
         </div>
 
-        <div class="third-plot-container">
+        <div class="plot-container">
             <!-- Create a div for the colony change bar chart -->
             <label for="colony-change-chart">Colony Change Chart:</label>
-            <div class="third-plot" id="third-plot"></div>
+            <div class="plot" id="third-plot"></div>
         </div>
     </div>
 
