@@ -284,9 +284,6 @@ function colonyChangePlot(selectedType) {
     Plotly.newPlot('third-plot', data, layout);
 }
 
-// Event listener for the "most-lost-or-gained" dropdown
-var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
-mostLostOrGainedDropdown.addEventListener("change", colonyChangePlot);
 
 // Event listener for the state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
@@ -307,10 +304,17 @@ topSelector.addEventListener("change", function () {
     updateBarChart();
 });
 
+var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
+mostLostOrGainedDropdown.addEventListener("change", function () {
+    colonyChangePlot(document.getElementById("colony-change-type").value);
+});
+
+// Remove the event listener for colonyChangeTypeDropdown
 var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
-colonyChangeTypeDropdown.addEventListener("change", function() {
+colonyChangeTypeDropdown.removeEventListener("change", function() {
     colonyChangePlot(colonyChangeTypeDropdown.value);
 });
+
 
 // Event listener for time frame selector dropdown
 var timeFrameSelector = document.getElementById("time-frame-selector");
