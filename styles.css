@@ -19,18 +19,18 @@ body {
     justify-content: space-around;
     align-items: center;
     height: 100vh;
-    padding: 20px;
 }
 
 /* Style for each plot container */
 .plot-container {
     flex: 1;
+    height: 90%;
     padding: 20px;
     border: 1px solid #ccc;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* Align items to the bottom */
     align-items: center;
-    justify-content: center;
     background-color: #fff; /* Set a background color for the plot container */
 }
 
@@ -44,7 +44,7 @@ label {
 select {
     width: 100%;
     padding: 10px;
-    margin: 5px 0; /* Adjust the margin for dropdowns */
+    margin: 3px 0; /* Decreased margin for dropdowns */
     font-size: 16px;
 }
 
@@ -53,19 +53,11 @@ select {
     width: 100%;
     min-height: 400px;
     /* Add other CSS styles for the plots as needed */
-}
-
-/* Style for the second plot (bar chart) */
-.second-plot {
-    width: 100%;
-    min-height: 400px;
+    background-color: #fff; /* Set a background color for the plot */
     border: 1px solid #ccc;
-    background-color: #fff;
-    margin-top: auto; /* Push the second plot to the bottom */
 }
 
 /* Remove hover effect on plot containers */
-.plot-container:hover {
-    box-shadow: none; /* Remove the hover shadow */
-    transform: none; /* Remove the hover transformation */
+.plot-container.plotly {
+
 }
