@@ -31,6 +31,10 @@
             width: 80%;
             /* Add other CSS styles for the second plot as needed */
         }
+        
+        .third-plot {
+            flex: 1; /* Third plot section takes up equal space */
+        }
     </style>
 </head>
 <body>
@@ -72,6 +76,12 @@
             <!-- Create a div for the bar chart -->
             <div class="second-plot" id="second-plot"></div>
             <!-- Add other content or plots here -->
+        </div>
+
+        <div class="third-plot-container">
+            <!-- Create a div for the colony change bar chart -->
+            <label for="colony-change-chart">Colony Change Chart:</label>
+            <div class="third-plot" id="third-plot"></div>
         </div>
     </div>
 

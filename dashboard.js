@@ -196,6 +196,60 @@ function updateTimeFrames() {
     updateBarChart();
 }
 
+function colonyChangePlot() {
+    // Access data from the loaded CSV (df)
+    var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
+    var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
+    
+    var merged_df = [];
+    for (var i = 0; i < df_2023_Q2.length; i++) {
+        var entry2023 = df_2023_Q2[i];
+        var entry2015 = df_2015_Q1.find(row => row.State === entry2023.State);
+        
+        if (entry2015) {
+            var colonyDiff = entry2023.Max_Colonies_2023_Q2 - entry2015.Max_Colonies_2015_Q1;
+            var pctLost = (colonyDiff / entry2015.Max_Colonies_2015_Q1) * 100;
+            
+            merged_df.push({
+                'State': entry2023.State,
+                'colony_diff': colonyDiff,
+                'pct_lost': pctLost,
+            });
+        }
+    }
+    
+    merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
+    
+    var top_5_most_lost = merged_df.slice(0, 5);
+    top_5_most_lost.forEach(row => row.colony_diff = Math.abs(row.colony_diff));
+    
+    var states = top_5_most_lost.map(row => row.State);
+    var colonyDiffs = top_5_most_lost.map(row => row.colony_diff);
+    
+    var data = [{
+        x: states,
+        y: colonyDiffs,
+        type: 'bar',
+        marker: {
+            color: 'blue' // Change the color as needed
+        }
+    }];
+    
+    var layout = {
+        title: 'States With Highest Decrease in Colonies',
+        xaxis: {
+            title: 'State',
+        },
+        yaxis: {
+            title: 'Absolute Colony Difference',
+        }
+    };
+    
+    // Update the "third-plot" div with the bar chart
+    Plotly.newPlot('third-plot', data, layout);
+}
+
+
 
 // Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
