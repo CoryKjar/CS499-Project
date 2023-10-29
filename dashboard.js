@@ -198,6 +198,7 @@ function colonyChangePlot() {
     // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
+    console.log('df2015Q1', df_2015_Q1);
 
     // Initialize the merged data array
     var merged_df = [];
@@ -211,10 +212,10 @@ function colonyChangePlot() {
         console.log("Entry 2015:", entry2015);
 
         if (entry2015) {
-            console.log("Max_Colonies_2015_Q1:", entry2015.Max_Colonies_2015_Q1);
-            if (entry2015.Max_Colonies_2015_Q1 !== null) {
-                var colonyDiff = parseFloat(entry2023.Max_Colonies_2023_Q2) - parseFloat(entry2015.Max_Colonies_2015_Q1);
-                var pctLost = (colonyDiff / parseFloat(entry2015.Max_Colonies_2015_Q1)) * 100;
+            console.log("Max_Colonies_2015_Q1:", entry2015.Max_Colonies);
+            if (entry2015.Max_Colonies !== null) {
+                var colonyDiff = parseFloat(entry2023.Max_Colonies) - parseFloat(entry2015.Max_Colonies);
+                var pctLost = (colonyDiff / parseFloat(entry2015.Max_Colonies)) * 100;
 
                 console.log("Colony Difference:", colonyDiff);
                 console.log("Percentage Lost:", pctLost);
