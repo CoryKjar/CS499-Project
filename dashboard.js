@@ -304,15 +304,12 @@ topSelector.addEventListener("change", function () {
     updateBarChart();
 });
 
+// Event listener for the "most-lost-or-gained" dropdown
 var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
 mostLostOrGainedDropdown.addEventListener("change", function () {
-    colonyChangePlot(document.getElementById("colony-change-type").value);
-});
-
-// Remove the event listener for colonyChangeTypeDropdown
-var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
-colonyChangeTypeDropdown.removeEventListener("change", function() {
-    colonyChangePlot(colonyChangeTypeDropdown.value);
+    var mostLostOrGainedValue = mostLostOrGainedDropdown.value;
+    var colonyChangeTypeValue = colonyChangeTypeDropdown.value;
+    colonyChangePlot(colonyChangeTypeValue, mostLostOrGainedValue);
 });
 
 
