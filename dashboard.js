@@ -280,6 +280,7 @@ function colonyChangePlot(selectedType) {
     };
 
     // Update the "third-plot" div with the bar chart
+    Plotly.purge('third-plot');
     Plotly.newPlot('third-plot', data, layout);
 }
 
