@@ -13,6 +13,7 @@ function loadDataAndParseCSV() {
         complete: function(results) {
             // Store the parsed data in the df variable
             df = results.data;
+            console.log("Data Frame:", df); // Log the data frame to the console
             populateDropdowns();
             updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
