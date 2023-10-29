@@ -17,6 +17,7 @@ function loadDataAndParseCSV() {
             populateDropdowns();
             updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
+            colonyChangePlot();
         }
     });
 }
