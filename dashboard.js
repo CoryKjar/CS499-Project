@@ -10,13 +10,13 @@ function loadDataAndParseCSV() {
         header: true,
         dynamicTyping: true,
         download: true,
-        complete: function(results) {
+        complete: function (results) {
             // Store the parsed data in the df variable
             df = results.data;
             populateDropdowns();
             updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
-            colonyChangePlot();
+            colonyChangePlot(document.getElementById("colony-change-type").value);
         }
     });
 }
@@ -36,7 +36,7 @@ function populateDropdowns() {
     var uniqueStates = [...new Set(df.map(row => row.State))];
 
     // Add states to the state dropdown
-    uniqueStates.forEach(function(state) {
+    uniqueStates.forEach(function (state) {
         var option = document.createElement("option");
         option.value = state;
         option.text = state;
@@ -48,7 +48,7 @@ function populateDropdowns() {
     var filteredVariables = variableNames.filter(name => name !== "Quarter" && name !== "State");
 
     // Add variables to the line plot variable dropdown
-    filteredVariables.forEach(function(variable) {
+    filteredVariables.forEach(function (variable) {
         var option = document.createElement("option");
         option.value = variable;
         option.text = variable;
@@ -56,7 +56,7 @@ function populateDropdowns() {
     });
 
     // Add variables to the bar chart variable dropdown
-    filteredVariables.forEach(function(variable) {
+    filteredVariables.forEach(function (variable) {
         var option = document.createElement("option");
         option.value = variable;
         option.text = variable;
@@ -75,16 +75,16 @@ function updateLinePlot() {
     var selectedVariable = yVariableDropdown.value;
 
     // Filter the data for the selected state
-    var df_state = df.filter(function(row) {
+    var df_state = df.filter(function (row) {
         return row.State === selectedState;
     });
 
     // Extract x and y data
-    var x = df_state.map(function(row) {
+    var x = df_state.map(function (row) {
         return row.Quarter;
     });
 
-    var y = df_state.map(function(row) {
+    var y = df_state.map(function (row) {
         return row[selectedVariable];
     });
 
@@ -118,7 +118,7 @@ function updateBarChart() {
     var selectedVariable = barChartVariableDropdown.value;
 
     // Filter the data based on the selected time frame
-    var filteredData = df.filter(function(row) {
+    var filteredData = df.filter(function (row) {
         if (selectedTimeFrame === "last-4-quarters") {
             return lastFourQuarters.includes(row.Quarter);
         } else if (selectedTimeFrame === "last-quarter") {
@@ -128,7 +128,7 @@ function updateBarChart() {
     });
 
     // Calculate the mean of the selected variable for each state
-    var meanValues = filteredData.reduce(function(result, row) {
+    var meanValues = filteredData.reduce(function (result, row) {
         if (row.State !== "US TOTAL") { // Exclude "US TOTAL"
             result[row.State] = result[row.State] || { total: 0, count: 0 };
             result[row.State].total += row[selectedVariable];
@@ -151,7 +151,7 @@ function updateBarChart() {
     // Select the top 10 or lowest 10 states
     var topStates = sortedStates.slice(0, 10);
 
-    var topStatesData = topStates.map(function(state) {
+    var topStatesData = topStates.map(function (state) {
         return meanValues[state].total / meanValues[state].count;
     });
 
@@ -181,23 +181,22 @@ function updateTimeFrames() {
     // Filter out null values from the array
     var quarters = df.map(row => row.Quarter).filter(quarter => quarter !== null);
     // Remove duplicates and sort quarters in descending order (latest first)
-    var uniqueQuarters = [...new Set(quarters)].sort(function(a, b) {
+    var uniqueQuarters = [...new Set(quarters)].sort(function (a, b) {
         return new Date(b) - new Date(a);
     });
     // Get the last four quarters
-    lastFourQuarters = uniqueQuarters[uniqueQuarters.length - 4];
+    lastFourQuarters = uniqueQuarters.slice(0, 4);
 
     // Get the last quarter
-    lastQuarter = uniqueQuarters[uniqueQuarters.length - 1];
+    lastQuarter = uniqueQuarters[0];
 
     // Update the bar chart title when the time frames change
     updateBarChart();
 }
 
-// ...
-
+// Function to handle the colony change plot
 function colonyChangePlot(selectedType) {
-    console.log("colonyChangePlot function called"); // Log when the function is called
+    console.log("colonyChangePlot function called");
 
     // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
@@ -230,10 +229,9 @@ function colonyChangePlot(selectedType) {
 
     // Get the selected option from the type dropdown
     var mostLostOrGained = document.getElementById("most-lost-or-gained").value;
-    console.log("Selected option:", mostLostOrGained); // Log the selected option
+    console.log("Selected option:", mostLostOrGained);
 
     if (mostLostOrGained === "most-gained") {
-        // If "most gained" is selected, reverse the sorted data
         merged_df.reverse();
     }
 
@@ -289,14 +287,7 @@ function colonyChangePlot(selectedType) {
 var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
 mostLostOrGainedDropdown.addEventListener("change", colonyChangePlot);
 
-var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
-colonyChangeTypeDropdown.addEventListener("change", function() {
-    console.log("Select Type dropdown changed"); // Log when the dropdown changes
-    colonyChangePlot(colonyChangeTypeDropdown.value); // Pass the selected type to the function
-});
-
-
-// Event listener for state dropdown
+// Event listener for the state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
 stateDropdown.addEventListener("change", updateLinePlot);
 
@@ -310,17 +301,17 @@ barChartVariableDropdown.addEventListener("change", updateBarChart);
 
 // Event listener for top selector dropdown
 var topSelector = document.getElementById("top-selector");
-topSelector.addEventListener("change", function() {
+topSelector.addEventListener("change", function () {
     selectedTopOption = topSelector.value;
     updateBarChart();
 });
 
 // Event listener for time frame selector dropdown
 var timeFrameSelector = document.getElementById("time-frame-selector");
-timeFrameSelector.addEventListener("change", function() {
+timeFrameSelector.addEventListener("change", function () {
     selectedTimeFrame = timeFrameSelector.value;
     updateBarChart();
-});
+}
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
