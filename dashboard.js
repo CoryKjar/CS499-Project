@@ -199,13 +199,15 @@ function colonyChangePlot() {
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
 
-    // Convert columns to numeric type
+    // Convert columns to numeric type and add console logs
     df_2023_Q2.forEach(row => {
         row.Max_Colonies_2023_Q2 = parseFloat(row.Max_Colonies_2023_Q2);
+        console.log(`Parsed Max_Colonies_2023_Q2 for ${row.State}: ${row.Max_Colonies_2023_Q2}`);
     });
 
     df_2015_Q1.forEach(row => {
         row.Max_Colonies_2015_Q1 = parseFloat(row.Max_Colonies_2015_Q1);
+        console.log(`Parsed Max_Colonies_2015_Q1 for ${row.State}: ${row.Max_Colonies_2015_Q1}`);
     });
 
     // Merge the two datasets based on the 'State' column
@@ -224,6 +226,9 @@ function colonyChangePlot() {
                 'colony_diff': colonyDiff,
                 'pct_lost': pctLost,
             });
+
+            console.log(`Calculated colony_diff for ${entry2023.State}: ${colonyDiff}`);
+            console.log(`Calculated pct_lost for ${entry2023.State}: ${pctLost}`);
         }
     }
 
