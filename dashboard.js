@@ -207,17 +207,28 @@ function colonyChangePlot() {
         var entry2023 = df_2023_Q2[i];
         var entry2015 = df_2015_Q1.find(row => row.State === entry2023.State);
 
-        if (entry2015 && entry2015.Max_Colonies_2015_Q1 !== null) {
-            var colonyDiff = parseFloat(entry2023.Max_Colonies_2023_Q2) - parseFloat(entry2015.Max_Colonies_2015_Q1);
-            var pctLost = (colonyDiff / parseFloat(entry2015.Max_Colonies_2015_Q1)) * 100;
+        console.log("Entry 2023:", entry2023);
+        console.log("Entry 2015:", entry2015);
 
-            merged_df.push({
-                'State': entry2023.State,
-                'colony_diff': colonyDiff,
-                'pct_lost': pctLost,
-            });
+        if (entry2015) {
+            console.log("Max_Colonies_2015_Q1:", entry2015.Max_Colonies_2015_Q1);
+            if (entry2015.Max_Colonies_2015_Q1 !== null) {
+                var colonyDiff = parseFloat(entry2023.Max_Colonies_2023_Q2) - parseFloat(entry2015.Max_Colonies_2015_Q1);
+                var pctLost = (colonyDiff / parseFloat(entry2015.Max_Colonies_2015_Q1)) * 100;
+
+                console.log("Colony Difference:", colonyDiff);
+                console.log("Percentage Lost:", pctLost);
+
+                merged_df.push({
+                    'State': entry2023.State,
+                    'colony_diff': colonyDiff,
+                    'pct_lost': pctLost,
+                });
+            }
         }
     }
+
+    console.log("Merged Data:", merged_df);
 
     // Sort the data by 'colony_diff' in ascending order
     merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
