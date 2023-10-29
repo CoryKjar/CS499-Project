@@ -197,6 +197,8 @@ function updateTimeFrames() {
 // ...
 
 function colonyChangePlot() {
+    console.log("colonyChangePlot function called"); // Log when the function is called
+
     // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
@@ -228,6 +230,7 @@ function colonyChangePlot() {
 
     // Get the selected option from the dropdown
     var mostLostOrGained = document.getElementById("most-lost-or-gained").value;
+    console.log("Selected option:", mostLostOrGained); // Log the selected option
 
     if (mostLostOrGained === "most-gained") {
         // If "most gained" is selected, reverse the sorted data
@@ -265,13 +268,10 @@ function colonyChangePlot() {
     Plotly.newPlot('third-plot', data, layout);
 }
 
+
 // Event listener for the "most-lost-or-gained" dropdown
 var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
 mostLostOrGainedDropdown.addEventListener("change", colonyChangePlot);
-
-
-
-
 
 
 // Event listener for state dropdown
