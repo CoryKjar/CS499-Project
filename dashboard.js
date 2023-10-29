@@ -186,10 +186,10 @@ function updateTimeFrames() {
     });
 
     // Get the last four quarters
-    lastFourQuarters = uniqueQuarters.slice(0, 4);
+    lastFourQuarters = uniqueQuarters.slice(-4);
 
     // Get the last quarter
-    lastQuarter = uniqueQuarters[0];
+    lastQuarter = uniqueQuarters[-1];
 
     // Update the bar chart title when the time frames change
     updateBarChart();
