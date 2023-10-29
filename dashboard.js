@@ -195,20 +195,24 @@ function updateTimeFrames() {
 }
 
 function colonyChangePlot() {
-    // Access data from the loaded CSV (df)
+    // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
-    
+
+    // Merge the two datasets based on the 'State' column
     var merged_df = [];
-    
+
     for (var i = 0; i < df_2023_Q2.length; i++) {
         var entry2023 = df_2023_Q2[i];
         var entry2015 = df_2015_Q1.find(row => row.State === entry2023.State);
-        
+        console.log('entry2023', entry2023);
+        console.log('entry2015', entry2015);
+
         if (entry2015 && entry2015.Max_Colonies_2015_Q1 !== 0) {
             var colonyDiff = entry2023.Max_Colonies_2023_Q2 - entry2015.Max_Colonies_2015_Q1;
             var pctLost = (colonyDiff / entry2015.Max_Colonies_2015_Q1) * 100;
-            
+            console.log('colonydiff', colonyDiff);
+            console.log('pctlost', pctLost);
             merged_df.push({
                 'State': entry2023.State,
                 'colony_diff': colonyDiff,
@@ -216,15 +220,18 @@ function colonyChangePlot() {
             });
         }
     }
-    
+
+    // Sort the data by 'colony_diff' in ascending order
     merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
-    
+    console.log('mergeddf', merged_df);
+    // Select the top 5 states with the highest decrease in colonies
     var top_5_most_lost = merged_df.slice(0, 5);
     top_5_most_lost.forEach(row => row.colony_diff = Math.abs(row.colony_diff));
-    
+
+    // Create a Plotly bar chart
     var states = top_5_most_lost.map(row => row.State);
     var colonyDiffs = top_5_most_lost.map(row => row.colony_diff);
-    
+
     var data = [{
         x: states,
         y: colonyDiffs,
@@ -233,7 +240,7 @@ function colonyChangePlot() {
             color: 'blue' // Change the color as needed
         }
     }];
-    
+
     var layout = {
         title: 'States With Highest Decrease in Colonies',
         xaxis: {
@@ -243,10 +250,11 @@ function colonyChangePlot() {
             title: 'Absolute Colony Difference',
         }
     };
-    
+
     // Update the "third-plot" div with the bar chart
     Plotly.newPlot('third-plot', data, layout);
 }
+
 
 
 
