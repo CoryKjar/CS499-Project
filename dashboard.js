@@ -198,7 +198,6 @@ function colonyChangePlot() {
     // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
-    console.log('df2015Q1', df_2015_Q1);
 
     // Initialize the merged data array
     var merged_df = [];
@@ -208,17 +207,10 @@ function colonyChangePlot() {
         var entry2023 = df_2023_Q2[i];
         var entry2015 = df_2015_Q1.find(row => row.State === entry2023.State);
 
-        console.log("Entry 2023:", entry2023);
-        console.log("Entry 2015:", entry2015);
-
-        if (entry2015) {
-            console.log("Max_Colonies_2015_Q1:", entry2015.Max_Colonies);
+        if (entry2015 && entry2015.State !== 'US TOTAL') {
             if (entry2015.Max_Colonies !== null) {
                 var colonyDiff = parseFloat(entry2023.Max_Colonies) - parseFloat(entry2015.Max_Colonies);
                 var pctLost = (colonyDiff / parseFloat(entry2015.Max_Colonies)) * 100;
-
-                console.log("Colony Difference:", colonyDiff);
-                console.log("Percentage Lost:", pctLost);
 
                 merged_df.push({
                     'State': entry2023.State,
@@ -228,8 +220,6 @@ function colonyChangePlot() {
             }
         }
     }
-
-    console.log("Merged Data:", merged_df);
 
     // Sort the data by 'colony_diff' in ascending order
     merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
@@ -264,6 +254,7 @@ function colonyChangePlot() {
     // Update the "third-plot" div with the bar chart
     Plotly.newPlot('third-plot', data, layout);
 }
+
 
 
 
