@@ -291,8 +291,10 @@ mostLostOrGainedDropdown.addEventListener("change", colonyChangePlot);
 
 var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
 colonyChangeTypeDropdown.addEventListener("change", function() {
+    console.log("Select Type dropdown changed"); // Log when the dropdown changes
     colonyChangePlot(colonyChangeTypeDropdown.value); // Pass the selected type to the function
 });
+
 
 // Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
