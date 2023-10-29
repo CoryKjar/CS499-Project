@@ -179,12 +179,12 @@ function updateBarChart() {
 // Function to update the available time frames based on the unique values in the Quarter column
 function updateTimeFrames() {
     var uniqueQuarters = [...new Set(df.map(row => row.Quarter))];
-
+    console.log(uniqueQuarters);
     // Sort quarters in descending order (latest first)
     uniqueQuarters.sort(function(a, b) {
         return new Date(b) - new Date(a);
     });
-
+    
     // Get the last four quarters
     lastFourQuarters = uniqueQuarters.slice(uniqueQuarters.length - 4);
 
