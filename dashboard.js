@@ -198,12 +198,14 @@ function colonyChangePlot() {
     // Access data from the loaded CSV (df)
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
+    
     var merged_df = [];
+    
     for (var i = 0; i < df_2023_Q2.length; i++) {
         var entry2023 = df_2023_Q2[i];
         var entry2015 = df_2015_Q1.find(row => row.State === entry2023.State);
         
-        if (entry2015) {
+        if (entry2015 && entry2015.Max_Colonies_2015_Q1 !== 0) {
             var colonyDiff = entry2023.Max_Colonies_2023_Q2 - entry2015.Max_Colonies_2015_Q1;
             var pctLost = (colonyDiff / entry2015.Max_Colonies_2015_Q1) * 100;
             
@@ -214,16 +216,14 @@ function colonyChangePlot() {
             });
         }
     }
-    console.log(merged_df);
+    
     merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
     
     var top_5_most_lost = merged_df.slice(0, 5);
     top_5_most_lost.forEach(row => row.colony_diff = Math.abs(row.colony_diff));
-    console.log('most lost: ', top_5_most_lost)
+    
     var states = top_5_most_lost.map(row => row.State);
     var colonyDiffs = top_5_most_lost.map(row => row.colony_diff);
-    console.log('states', states);
-    console.log('diff', colonyDiff);
     
     var data = [{
         x: states,
