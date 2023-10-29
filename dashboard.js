@@ -198,6 +198,10 @@ function updateTimeFrames() {
 function colonyChangePlot(selectedType) {
     console.log("colonyChangePlot function called");
 
+    var mostLostOrGained = document.getElementById("most-lost-or-gained").value;
+    var selectedType = document.getElementById("colony-change-type").value;
+    console.log("Selected options:", mostLostOrGained, selectedType);
+
     // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
@@ -304,12 +308,15 @@ topSelector.addEventListener("change", function () {
     updateBarChart();
 });
 
-// Event listener for the "most-lost-or-gained" dropdown
 var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
 mostLostOrGainedDropdown.addEventListener("change", function () {
-    var mostLostOrGainedValue = mostLostOrGainedDropdown.value;
-    var colonyChangeTypeValue = colonyChangeTypeDropdown.value;
-    colonyChangePlot(colonyChangeTypeValue, mostLostOrGainedValue);
+    colonyChangePlot();
+});
+
+// Event listener for the "colony-change-type" dropdown
+var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
+colonyChangeTypeDropdown.addEventListener("change", function() {
+    colonyChangePlot();
 });
 
 
