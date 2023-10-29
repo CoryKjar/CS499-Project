@@ -178,22 +178,24 @@ function updateBarChart() {
 
 // Function to update the available time frames based on the unique values in the Quarter column
 function updateTimeFrames() {
-    var uniqueQuarters = [...new Set(df.map(row => row.Quarter))];
-    console.log(uniqueQuarters);
-    // Sort quarters in descending order (latest first)
-    uniqueQuarters.sort(function(a, b) {
+    // Filter out null values from the array
+    var quarters = df.map(row => row.Quarter).filter(quarter => quarter !== null);
+    console.log('All Quarters', quarters);
+    // Remove duplicates and sort quarters in descending order (latest first)
+    var uniqueQuarters = [...new Set(quarters)].sort(function(a, b) {
         return new Date(b) - new Date(a);
     });
-    
+    console.log('unique: ', uniqueQuarters);
     // Get the last four quarters
-    lastFourQuarters = uniqueQuarters.slice(uniqueQuarters.length - 4);
+    lastFourQuarters = uniqueQuarters.slice(0, 4);
 
     // Get the last quarter
-    lastQuarter = uniqueQuarters[uniqueQuarters.length - 1];
+    lastQuarter = uniqueQuarters[0];
 
     // Update the bar chart title when the time frames change
     updateBarChart();
 }
+
 
 // Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
