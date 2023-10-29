@@ -194,6 +194,8 @@ function updateTimeFrames() {
     updateBarChart();
 }
 
+// ...
+
 function colonyChangePlot() {
     // Filter data for '2023_Q2' and '2015_Q1' quarters
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
@@ -262,6 +264,11 @@ function colonyChangePlot() {
     // Update the "third-plot" div with the bar chart
     Plotly.newPlot('third-plot', data, layout);
 }
+
+// Event listener for the "most-lost-or-gained" dropdown
+var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
+mostLostOrGainedDropdown.addEventListener("change", colonyChangePlot);
+
 
 
 

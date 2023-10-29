@@ -69,22 +69,19 @@
 
             <!-- Create a div for the bar chart -->
             <div class="plot" id="second-plot"></div>
-            <!-- Add other content or plots here -->
         </div>
 
         <div class="plot-container">
-            <!-- Create a div for the colony change bar chart -->
-            <label for="colony-change-chart">Colony Change Chart:</label>
-            <div class="plot" id="third-plot"></div>
-        </div>
+            <!-- Create variable dropdown for the colony change bar chart -->
+            <label for="colony-change-variable-dropdown">Select Variable for Colony Change Chart:</label>
+            <select id="colony-change-variable-dropdown"></select>
 
-        <div class="plot-container">
-            <!-- Create a dropdown for selecting most lost or most gained -->
             <label for="most-lost-or-gained">Select Most Lost or Most Gained:</label>
             <select id="most-lost-or-gained">
                 <option value="most-lost">Most Lost</option>
                 <option value="most-gained">Most Gained</option>
             </select>
+            <div class="plot" id="third-plot"></div>
         </div>
     </div>
 
