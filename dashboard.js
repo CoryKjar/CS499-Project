@@ -306,6 +306,11 @@ topSelector.addEventListener("change", function () {
     updateBarChart();
 });
 
+var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
+colonyChangeTypeDropdown.addEventListener("change", function() {
+    colonyChangePlot(colonyChangeTypeDropdown.value);
+});
+
 // Event listener for time frame selector dropdown
 var timeFrameSelector = document.getElementById("time-frame-selector");
 timeFrameSelector.addEventListener("change", function () {
