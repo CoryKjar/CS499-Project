@@ -199,36 +199,23 @@ function colonyChangePlot() {
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
 
-    // Convert columns to numeric type and add console logs
-    df_2023_Q2.forEach(row => {
-        row.Max_Colonies_2023_Q2 = parseFloat(row.Max_Colonies_2023_Q2);
-        console.log(`Parsed Max_Colonies_2023_Q2 for ${row.State}: ${row.Max_Colonies_2023_Q2}`);
-    });
-
-    df_2015_Q1.forEach(row => {
-        row.Max_Colonies_2015_Q1 = parseFloat(row.Max_Colonies_2015_Q1);
-        console.log(`Parsed Max_Colonies_2015_Q1 for ${row.State}: ${row.Max_Colonies_2015_Q1}`);
-    });
-
-    // Merge the two datasets based on the 'State' column
+    // Initialize the merged data array
     var merged_df = [];
 
+    // Merge the two datasets based on the 'State' column
     for (var i = 0; i < df_2023_Q2.length; i++) {
         var entry2023 = df_2023_Q2[i];
         var entry2015 = df_2015_Q1.find(row => row.State === entry2023.State);
 
-        if (entry2015 && entry2015.Max_Colonies_2015_Q1 !== 0) {
-            var colonyDiff = entry2023.Max_Colonies_2023_Q2 - entry2015.Max_Colonies_2015_Q1;
-            var pctLost = (colonyDiff / entry2015.Max_Colonies_2015_Q1) * 100;
+        if (entry2015 && entry2015.Max_Colonies_2015_Q1 !== null) {
+            var colonyDiff = parseFloat(entry2023.Max_Colonies_2023_Q2) - parseFloat(entry2015.Max_Colonies_2015_Q1);
+            var pctLost = (colonyDiff / parseFloat(entry2015.Max_Colonies_2015_Q1)) * 100;
 
             merged_df.push({
                 'State': entry2023.State,
                 'colony_diff': colonyDiff,
                 'pct_lost': pctLost,
             });
-
-            console.log(`Calculated colony_diff for ${entry2023.State}: ${colonyDiff}`);
-            console.log(`Calculated pct_lost for ${entry2023.State}: ${pctLost}`);
         }
     }
 
