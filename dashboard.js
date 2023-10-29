@@ -196,7 +196,7 @@ function updateTimeFrames() {
 
 // ...
 
-function colonyChangePlot() {
+function colonyChangePlot(selectedType) {
     console.log("colonyChangePlot function called"); // Log when the function is called
 
     // Filter data for '2023_Q2' and '2015_Q1' quarters
@@ -228,7 +228,7 @@ function colonyChangePlot() {
     // Sort the data by 'colony_diff' in ascending order
     merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
 
-    // Get the selected option from the dropdown
+    // Get the selected option from the type dropdown
     var mostLostOrGained = document.getElementById("most-lost-or-gained").value;
     console.log("Selected option:", mostLostOrGained); // Log the selected option
 
@@ -243,24 +243,41 @@ function colonyChangePlot() {
 
     // Create a Plotly bar chart
     var states = top_5_states.map(row => row.State);
-    var colonyDiffs = top_5_states.map(row => row.colony_diff);
 
-    var data = [{
-        x: states,
-        y: colonyDiffs,
-        type: 'bar',
-        marker: {
-            color: 'blue' // Change the color as needed
-        }
-    }];
+    var data;
+    var title;
+
+    if (selectedType === "value") {
+        var colonyDiffs = top_5_states.map(row => row.colony_diff);
+        data = [{
+            x: states,
+            y: colonyDiffs,
+            type: 'bar',
+            marker: {
+                color: 'blue' // Change the color as needed
+            }
+        }];
+        title = 'States With Highest Decrease or Increase in Colonies (Value)';
+    } else if (selectedType === "percent") {
+        var pctLost = top_5_states.map(row => row.pct_lost);
+        data = [{
+            x: states,
+            y: pctLost,
+            type: 'bar',
+            marker: {
+                color: 'green' // Change the color as needed
+            }
+        }];
+        title = 'States With Highest Decrease or Increase in Colonies (Percent)';
+    }
 
     var layout = {
-        title: 'States With Highest Decrease or Increase in Colonies',
+        title: title,
         xaxis: {
             title: 'State',
         },
         yaxis: {
-            title: 'Absolute Colony Difference',
+            title: selectedType === "value" ? 'Absolute Colony Difference' : 'Percentage Lost',
         }
     };
 
@@ -268,11 +285,14 @@ function colonyChangePlot() {
     Plotly.newPlot('third-plot', data, layout);
 }
 
-
 // Event listener for the "most-lost-or-gained" dropdown
 var mostLostOrGainedDropdown = document.getElementById("most-lost-or-gained");
 mostLostOrGainedDropdown.addEventListener("change", colonyChangePlot);
 
+var colonyChangeTypeDropdown = document.getElementById("colony-change-type");
+colonyChangeTypeDropdown.addEventListener("change", function() {
+    colonyChangePlot(colonyChangeTypeDropdown.value); // Pass the selected type to the function
+});
 
 // Event listener for state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
