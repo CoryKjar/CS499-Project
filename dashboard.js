@@ -13,7 +13,6 @@ function loadDataAndParseCSV() {
         complete: function(results) {
             // Store the parsed data in the df variable
             df = results.data;
-            console.log("Data Frame:", df); // Log the data frame to the console
             populateDropdowns();
             updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
@@ -181,12 +180,10 @@ function updateBarChart() {
 function updateTimeFrames() {
     // Filter out null values from the array
     var quarters = df.map(row => row.Quarter).filter(quarter => quarter !== null);
-    console.log('All Quarters', quarters);
     // Remove duplicates and sort quarters in descending order (latest first)
     var uniqueQuarters = [...new Set(quarters)].sort(function(a, b) {
         return new Date(b) - new Date(a);
     });
-    console.log('unique: ', uniqueQuarters);
     // Get the last four quarters
     lastFourQuarters = uniqueQuarters[uniqueQuarters.length - 4];
 
@@ -201,7 +198,8 @@ function colonyChangePlot() {
     // Access data from the loaded CSV (df)
     var df_2023_Q2 = df.filter(row => row.Quarter === '2023_Q2');
     var df_2015_Q1 = df.filter(row => row.Quarter === '2015_Q1');
-    
+    console.log(df_2023_Q2)
+    console.log(df_2015_Q1)
     var merged_df = [];
     for (var i = 0; i < df_2023_Q2.length; i++) {
         var entry2023 = df_2023_Q2[i];
