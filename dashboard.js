@@ -311,7 +311,7 @@ var timeFrameSelector = document.getElementById("time-frame-selector");
 timeFrameSelector.addEventListener("change", function () {
     selectedTimeFrame = timeFrameSelector.value;
     updateBarChart();
-}
+});
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
