@@ -224,13 +224,21 @@ function colonyChangePlot() {
     // Sort the data by 'colony_diff' in ascending order
     merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
 
-    // Select the top 5 states with the highest decrease in colonies
-    var top_5_most_lost = merged_df.slice(0, 5);
-    top_5_most_lost.forEach(row => row.colony_diff = Math.abs(row.colony_diff));
+    // Get the selected option from the dropdown
+    var mostLostOrGained = document.getElementById("most-lost-or-gained").value;
+
+    if (mostLostOrGained === "most-gained") {
+        // If "most gained" is selected, reverse the sorted data
+        merged_df.reverse();
+    }
+
+    // Select the top 5 states with the highest decrease or increase in colonies
+    var top_5_states = merged_df.slice(0, 5);
+    top_5_states.forEach(row => row.colony_diff = Math.abs(row.colony_diff));
 
     // Create a Plotly bar chart
-    var states = top_5_most_lost.map(row => row.State);
-    var colonyDiffs = top_5_most_lost.map(row => row.colony_diff);
+    var states = top_5_states.map(row => row.State);
+    var colonyDiffs = top_5_states.map(row => row.colony_diff);
 
     var data = [{
         x: states,
@@ -242,7 +250,7 @@ function colonyChangePlot() {
     }];
 
     var layout = {
-        title: 'States With Highest Decrease in Colonies',
+        title: 'States With Highest Decrease or Increase in Colonies',
         xaxis: {
             title: 'State',
         },
@@ -254,7 +262,6 @@ function colonyChangePlot() {
     // Update the "third-plot" div with the bar chart
     Plotly.newPlot('third-plot', data, layout);
 }
-
 
 
 
