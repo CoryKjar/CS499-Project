@@ -32,7 +32,6 @@ function loadDataAndParseForecastCSV() {
         complete: function (results) {
             // Store the parsed data in the forecastData variable
             forecast_df = results.data;
-            populateDropdowns();
             updateForecastPlot();
         }
     });
