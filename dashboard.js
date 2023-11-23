@@ -19,7 +19,9 @@ function loadDataAndParseCSV() {
             updateBarChart(); // Call updateBarChart when data is loaded
             colonyChangePlot(document.getElementById("colony-change-type").value);
         }
+
     });
+}
 
 // Function to load forecast CSV data and parse it
 function loadDataAndParseForecastCSV() {
@@ -34,7 +36,7 @@ function loadDataAndParseForecastCSV() {
         }
     });
 }
-}
+
 
 // Function to populate state and variable dropdowns
 function populateDropdowns() {
