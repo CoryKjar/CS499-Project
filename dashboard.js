@@ -312,37 +312,45 @@ function colonyChangePlot() {
 }
 
 function updateForecastPlot() {
-    var xForecast = forecast_df.map(function (row) {
+    var stateDropdown = document.getElementById("forecast-state-dropdown");
+    var selectedState = stateDropdown.value;
+
+    // Filter the data for the selected state
+    var df_state = forecast_df.filter(function (row) {
+        return row.State === selectedState;
+    });
+
+    // Extract x and y data
+    var x = df_state.map(function (row) {
         return row.Quarter;
     });
 
-    var yForecast = forecast_df.map(function (row) {
-        // Replace 'YourVariableName' with the actual variable name in your forecast data
-        return row.YourVariableName;
+    var y = df_state.map(function (row) {
+        return row[Forecast];
     });
 
-    var traceForecast = {
-        x: xForecast,
-        y: yForecast,
+    // Create a Plotly line plot
+    var trace = {
+        x: x,
+        y: y,
         mode: 'lines',
-        name: 'Forecast',
+        name: selectedVariable,
     };
 
-    var dataForecast = [traceForecast];
+    var data = [trace];
 
-    var layoutForecast = {
-        title: `Forecast Plot`,
+    var layout = {
+        title: `Max Colonies Forecast next 4 Quarters: ${selectedState}`,
         xaxis: {
             title: 'Quarter',
             tickangle: -45,
         },
         yaxis: {
-            title: 'YourVariableName', // Replace with the actual variable name
+            title: selectedVariable,
         },
     };
 
-    // Update the "forecast-plot" div with the forecast plot
-    Plotly.newPlot('forecast-plot', dataForecast, layoutForecast);
+    Plotly.newPlot('line-plot', data, layout);
 }
 
 
