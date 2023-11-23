@@ -32,6 +32,7 @@ function loadDataAndParseForecastCSV() {
         complete: function (results) {
             // Store the parsed data in the forecastData variable
             forecast_df = results.data;
+            populateDropdowns();
             updateForecastPlot();
         }
     });
@@ -58,6 +59,18 @@ function populateDropdowns() {
         option.value = state;
         option.text = state;
         stateDropdown.appendChild(option);
+    });
+
+        // Add states to the forecast state dropdown
+    var forecastStateDropdown = document.getElementById("forecast-state-dropdown");
+    forecastStateDropdown.innerHTML = ""; // Clear existing options
+
+    var uniqueForecastStates = [...new Set(forecast_df.map(row => row.State))];
+    uniqueForecastStates.forEach(function (state) {
+        var option = document.createElement("option");
+        option.value = state;
+        option.text = state;
+        forecastStateDropdown.appendChild(option);
     });
 
     // Get variable names
@@ -315,7 +328,7 @@ function updateForecastPlot() {
     var stateDropdown = document.getElementById("forecast-state-dropdown");
     var selectedState = stateDropdown.value;
 
-    // Filter the data for the selected state
+    // Filter the data for the selected state in the forecast_df
     var df_state = forecast_df.filter(function (row) {
         return row.State === selectedState;
     });
@@ -326,7 +339,7 @@ function updateForecastPlot() {
     });
 
     var y = df_state.map(function (row) {
-        return row[Forecast];
+        return row['Max Colonies Forecast']; // Assuming the column name is 'Max Colonies Forecast'
     });
 
     // Create a Plotly line plot
@@ -391,6 +404,11 @@ timeFrameSelector.addEventListener("change", function () {
     selectedTimeFrame = timeFrameSelector.value;
     updateBarChart();
 });
+
+// Event listener for the forecast state dropdown
+var forecastStateDropdown = document.getElementById("forecast-state-dropdown");
+forecastStateDropdown.addEventListener("change", updateForecastPlot);
+
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
