@@ -35,6 +35,8 @@ def process_data(raw_data_path, output_folder):
     df = df[df['State'] != 'OTHER STATES']
 
     df = df.replace(',', '', regex=True)
+    df = df.replace(' (Z)', 0)
+
     df[df.columns[3:]] = df.iloc[:, 3:].apply(pd.to_numeric, errors='coerce')
 
     # Split the dataset
@@ -56,7 +58,8 @@ def process_data(raw_data_path, output_folder):
     # Drop unnecessary columns
     df = df[['Quarter'] + [col for col in df.columns if col != 'Quarter']]
 
-
+    # Concatenate the new rows with the existing DataFrame
+    df = pd.concat([df, hawaii_df], ignore_index=True)
     # Calculate the sum of 'Max_Colonies' for each quarter for 'US TOTAL'
     quarterly_sums = df.groupby('Quarter')['Max_Colonies'].sum()
     for quarter, sum_value in quarterly_sums.items():

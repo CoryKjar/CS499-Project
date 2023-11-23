@@ -1,4 +1,5 @@
 var df; // To store the CSV data
+var forecast_df;
 var selectedTopOption = "highest"; // Default to highest
 var selectedTimeFrame = "all-time"; // Default to all time
 var lastFourQuarters = []; // Store the last four quarters
@@ -19,6 +20,20 @@ function loadDataAndParseCSV() {
             colonyChangePlot(document.getElementById("colony-change-type").value);
         }
     });
+
+// Function to load forecast CSV data and parse it
+function loadDataAndParseForecastCSV() {
+    Papa.parse("forecast-data.csv", {
+        header: true,
+        dynamicTyping: true,
+        download: true,
+        complete: function (results) {
+            // Store the parsed data in the forecastData variable
+            forecast_df = results.data;
+            updateForecastPlot();
+        }
+    });
+}
 }
 
 // Function to populate state and variable dropdowns
@@ -294,6 +309,40 @@ function colonyChangePlot() {
     Plotly.newPlot('third-plot', data, layout);
 }
 
+function updateForecastPlot() {
+    var xForecast = forecast_df.map(function (row) {
+        return row.Quarter;
+    });
+
+    var yForecast = forecast_df.map(function (row) {
+        // Replace 'YourVariableName' with the actual variable name in your forecast data
+        return row.YourVariableName;
+    });
+
+    var traceForecast = {
+        x: xForecast,
+        y: yForecast,
+        mode: 'lines',
+        name: 'Forecast',
+    };
+
+    var dataForecast = [traceForecast];
+
+    var layoutForecast = {
+        title: `Forecast Plot`,
+        xaxis: {
+            title: 'Quarter',
+            tickangle: -45,
+        },
+        yaxis: {
+            title: 'YourVariableName', // Replace with the actual variable name
+        },
+    };
+
+    // Update the "forecast-plot" div with the forecast plot
+    Plotly.newPlot('forecast-plot', dataForecast, layoutForecast);
+}
+
 
 // Event listener for the state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
@@ -335,3 +384,4 @@ timeFrameSelector.addEventListener("change", function () {
 
 // Load CSV data and parse it when the page loads
 loadDataAndParseCSV();
+loadDataAndParseForecastCSV();
