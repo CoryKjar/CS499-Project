@@ -32,6 +32,7 @@ function loadDataAndParseForecastCSV() {
         complete: function (results) {
             // Store the parsed data in the forecastData variable
             forecast_df = results.data;
+            populateDropdowns();
             updateForecastPlot();
         }
     });
@@ -362,7 +363,7 @@ function updateForecastPlot() {
         },
     };
 
-    Plotly.newPlot('line-plot', data, layout);
+    Plotly.newPlot('forecast-plot', data, layout);
 }
 
 
