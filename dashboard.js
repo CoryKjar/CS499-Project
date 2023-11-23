@@ -334,7 +334,7 @@ function updateForecastPlot() {
         x: x,
         y: y,
         mode: 'lines',
-        name: selectedVariable,
+        name: 'Max Colonies Forecast',
     };
 
     var data = [trace];
@@ -346,7 +346,7 @@ function updateForecastPlot() {
             tickangle: -45,
         },
         yaxis: {
-            title: selectedVariable,
+            title: 'Max Colonies',
         },
     };
 
