@@ -55,11 +55,13 @@ function loadDataAndParseForecastCSV() {
 // Function to populate state and variable dropdowns
 function populateDropdowns() {
     var stateDropdown = document.getElementById("state-dropdown");
+    var forecastStateDropdown = document.getElementById('forecast-state-dropdown');
     var yVariableDropdown = document.getElementById("y-variable-dropdown");
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
 
     // Clear existing options
     stateDropdown.innerHTML = "";
+    forecastStateDropdown.innerHTML = "";
     yVariableDropdown.innerHTML = "";
     barChartVariableDropdown.innerHTML = "";
 
@@ -72,6 +74,7 @@ function populateDropdowns() {
         option.value = state;
         option.text = state;
         stateDropdown.appendChild(option);
+        forecastStateDropdown.append(option)
     });
 
     // Get variable names
@@ -367,7 +370,6 @@ function updateForecastPlot() {
     // Update the "forecast-plot" div with the forecast line plot
     Plotly.newPlot('forecast-plot', dataForecast, layoutForecast);
 }
-
 
 
 // Event listener for the state dropdown
