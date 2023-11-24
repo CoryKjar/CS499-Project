@@ -201,6 +201,8 @@ function updateBarChart() {
         title: `Top 10 States by ${selectedTopOption} Average ${selectedVariable} <br> (${selectedTimeFrame})`,
         xaxis: {
             title: 'State',
+            tickangle: -45,
+
         },
         yaxis: {
             title: 'Average ' + selectedVariable,
