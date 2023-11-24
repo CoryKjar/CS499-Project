@@ -68,6 +68,13 @@ function populateDropdowns() {
         option.value = state;
         option.text = state;
         stateDropdown.appendChild(option);
+    });
+    
+    // Add states to the forecast state dropdown
+    uniqueStates.forEach(function (state) {
+        var option = document.createElement("option");
+        option.value = state;
+        option.text = state;
         forecastStateDropdown.appendChild(option);
     });
 
