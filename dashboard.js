@@ -1,54 +1,58 @@
 var df; // To store the CSV data
-var forecastData;
+var forecast_df
 var selectedTopOption = "highest"; // Default to highest
 var selectedTimeFrame = "all-time"; // Default to all time
 var lastFourQuarters = []; // Store the last four quarters
 var lastQuarter = ""; // Store the last quarter
 
 // Function to load CSV data and parse it
-function loadDataAndParseCSV() {
-    Papa.parse("data.csv", {
+function loadDataAndParseCSV(file, callback) {
+    Papa.parse(file, {
         header: true,
         dynamicTyping: true,
         download: true,
         complete: function (results) {
-            // Store the parsed data in the df variable
-            df = results.data;
-            loadDataAndParseForecastCSV();
-            populateDropdowns();
-            updateTimeFrames(); // Call updateTimeFrames when data is loaded
-            updateBarChart(); // Call updateBarChart when data is loaded
-            colonyChangePlot(document.getElementById("colony-change-type").value);
+            // Use the callback to store data in the appropriate variable
+            callback(results.data);
         }
-    });
-
-// Function to load forecast CSV data and parse it
-function loadDataAndParseForecastCSV() {
-    Papa.parse("forecast-data.csv", {
-        header: true,
-        dynamicTyping: true,
-        download: true,
-        complete: function (results) {
-            // Store the parsed data in the forecastData variable
-            forecastData = results.data;
-            console.log(forecastData)
-            updateForecastPlot();
-        }
-
     });
 }
+
+// Function to load both "data.csv" and "forecast-data.csv"
+function loadAllData() {
+    // Load "data.csv"
+    loadDataAndParseCSV("data.csv", function (data) {
+        df = data;
+        checkBothFilesLoaded();
+    });
+
+    // Load "forecast-data.csv"
+    loadDataAndParseCSV("forecast-data.csv", function (forecastData) {
+        forecast_df = forecastData;
+        checkBothFilesLoaded();
+    });
+}
+
+// Check if both files are loaded before further processing
+function checkBothFilesLoaded() {
+    if (df && forecast_df) {
+        console.log('DATA LOADED')
+        // Both files are loaded, proceed with further processing
+        populateDropdowns();
+        updateTimeFrames();
+        updateBarChart();
+        colonyChangePlot(document.getElementById("colony-change-type").value);
+    }
 }
 
 // Function to populate state and variable dropdowns
 function populateDropdowns() {
     var stateDropdown = document.getElementById("state-dropdown");
-    var forecastStateDropdown = document.getElementById('forecast-state-dropdown');
     var yVariableDropdown = document.getElementById("y-variable-dropdown");
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
 
     // Clear existing options
     stateDropdown.innerHTML = "";
-    forecastStateDropdown.innerHTML = "";
     yVariableDropdown.innerHTML = "";
     barChartVariableDropdown.innerHTML = "";
 
@@ -61,16 +65,6 @@ function populateDropdowns() {
         option.value = state;
         option.text = state;
         stateDropdown.appendChild(option);
-    });
-
-    var uniqueForecastStates = [...new Set(forecastData.map(row => row.State))];
-
-    // Add states to the state dropdown
-    uniqueForecastStates.forEach(function (state) {
-        var option = document.createElement("option");
-        option.value = state;
-        option.text = state;
-        forecastStateDropdown.appendChild(option);
     });
 
     // Get variable names
@@ -95,7 +89,6 @@ function populateDropdowns() {
 
     // Initialize the plot with default values
     updateLinePlot();
-    updateForecastPlot();
 }
 
 // Function to update the line plot
@@ -325,56 +318,10 @@ function colonyChangePlot() {
     Plotly.newPlot('third-plot', data, layout);
 }
 
-function updateForecastPlot() {
-    var stateDropdown = document.getElementById("forecast-state-dropdown");
-    var selectedState = stateDropdown.value;
-
-    // Filter the forecast data for the selected state
-    var forecastDataState = forecastData.filter(function (row) {
-        return row.State === selectedState;
-    });
-
-    // Extract x and y data from forecastDataState
-    var xForecast = forecastDataState.map(function (row) {
-        return row.Quarter;
-    });
-
-    var yForecast = forecastDataState.map(function (row) {
-        return row.Forecast; // Replace 'ForecastVariable' with the actual variable name in your forecast data
-    });
-
-    // Create a Plotly line plot for the forecast
-    var traceForecast = {
-        x: xForecast,
-        y: yForecast,
-        mode: 'lines',
-        name: 'Forecast',
-    };
-
-    var dataForecast = [traceForecast];
-
-    var layoutForecast = {
-        title: `Forecast for ${selectedState}`,
-        xaxis: {
-            title: 'Quarter',
-            tickangle: -45,
-        },
-        yaxis: {
-            title: 'Forecast Variable',
-        },
-    };
-
-    // Update the "forecast-plot" div with the forecast line plot
-    Plotly.newPlot('forecast-plot', dataForecast, layoutForecast);
-}
-
 
 // Event listener for the state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
 stateDropdown.addEventListener("change", updateLinePlot);
-
-var forecastStateDropdown = document.getElementById("forecast-state-dropdown");
-forecastStateDropdown.addEventListener("change", updateForecastPlot);
 
 // Event listener for variable dropdown
 var yVariableDropdown = document.getElementById("y-variable-dropdown");
