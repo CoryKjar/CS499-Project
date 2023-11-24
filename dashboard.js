@@ -31,6 +31,7 @@ function loadDataAndParseForecastCSV() {
         complete: function (results) {
             // Store the parsed data in the forecastData variable
             forecastData = results.data;
+            console.log(forecastData)
             updateForecastPlot();
         }
 
