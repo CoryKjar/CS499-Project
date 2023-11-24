@@ -347,7 +347,7 @@ function updateForecastPlot() {
         x: xForecast,
         y: yForecast,
         mode: 'lines',
-        name: selectedVariable, // Use the appropriate variable name
+        name: 'Forecast', // Use the appropriate variable name
     };
 
     var dataForecast = [traceForecast];
