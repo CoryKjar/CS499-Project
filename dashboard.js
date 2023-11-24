@@ -320,6 +320,8 @@ function colonyChangePlot() {
         title: title,
         xaxis: {
             title: 'State',
+            tickangle: 45,
+
         },
         yaxis: {
             title: selectedType === "value" ? 'Absolute Colony Difference' : 'Percentage Lost',
@@ -365,7 +367,7 @@ function updateForecastPlot() {
         title: `Forecast for ${selectedForecastState}`,
         xaxis: {
             title: 'Quarter',
-            tickangle: -45,
+            tickangle: 45,
         },
         yaxis: {
             title: 'Forecast', // Use the appropriate variable name
