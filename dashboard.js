@@ -339,7 +339,7 @@ function updateForecastPlot() {
     });
 
     var yForecast = forecast_df_state.map(function (row) {
-        return row[selectedVariable]; // Use the appropriate variable for the forecast
+        return row[Forecast]; // Use the appropriate variable for the forecast
     });
 
     // Create a Plotly line plot for the forecast
@@ -353,13 +353,13 @@ function updateForecastPlot() {
     var dataForecast = [traceForecast];
 
     var layoutForecast = {
-        title: `${selectedVariable} Forecast Over Time in ${selectedForecastState}`,
+        title: `Forecast for ${selectedForecastState}`,
         xaxis: {
             title: 'Quarter',
             tickangle: -45,
         },
         yaxis: {
-            title: selectedVariable, // Use the appropriate variable name
+            title: 'Forecast', // Use the appropriate variable name
         },
     };
 
