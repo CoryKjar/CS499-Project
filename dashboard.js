@@ -1,4 +1,5 @@
 var df; // To store the CSV data
+var forecastData;
 var selectedTopOption = "highest"; // Default to highest
 var selectedTimeFrame = "all-time"; // Default to all time
 var lastFourQuarters = []; // Store the last four quarters
@@ -20,23 +21,6 @@ function loadDataAndParseCSV() {
         }
     });
 
-    var originalData; // To store the original CSV data
-var forecastData; // To store the forecast CSV data
-
-// Function to load CSV data and parse it
-function loadDataAndParseCSV() {
-    Papa.parse("data.csv", {
-        header: true,
-        dynamicTyping: true,
-        download: true,
-        complete: function (results) {
-            // Store the parsed data in the originalData variable
-            originalData = results.data;
-            loadDataAndParseForecastCSV(); // Load forecast data after loading original data
-        }
-    });
-}
-
 // Function to load forecast CSV data and parse it
 function loadDataAndParseForecastCSV() {
     Papa.parse("forecast-data.csv", {
@@ -46,6 +30,7 @@ function loadDataAndParseForecastCSV() {
         complete: function (results) {
             // Store the parsed data in the forecastData variable
             forecastData = results.data;
+            updateForecastPlot();
         }
 
     });
