@@ -198,7 +198,7 @@ function updateBarChart() {
     }];
 
     var layout = {
-        title: `Top 10 States by ${selectedTopOption} Average ${selectedVariable} <br> (${selectedTimeFrame})`,
+        title: `${selectedTopOption} Average <br> ${selectedVariable} <br> (${selectedTimeFrame})`,
         xaxis: {
             title: 'State',
             tickangle: -45,
