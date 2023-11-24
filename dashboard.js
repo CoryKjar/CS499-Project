@@ -134,7 +134,7 @@ function updateLinePlot() {
     var data = [trace];
 
     var layout = {
-        title: `${selectedVariable} Over Time in ${selectedState}`,
+        title: `${selectedVariable} <br> Over Time in ${selectedState}`,
         xaxis: {
             title: 'Quarter',
             tickangle: -45,
@@ -302,7 +302,7 @@ function colonyChangePlot() {
                 color: 'blue' // Change the color as needed
             }
         }];
-        title = 'States With Highest Decrease or Increase in Colonies (Value)';
+        title = `States With ${mostLostorGained} in Colonies (Value)`;
     } else if (selectedType === "percent") {
         var pctLost = top_5_states.map(row => row.pct_lost);
         data = [{
@@ -313,7 +313,7 @@ function colonyChangePlot() {
                 color: 'green' // Change the color as needed
             }
         }];
-        title = 'States With Highest Decrease or Increase in Colonies (Percent)';
+        title = `States With ${mostLostorGained} in Colonies (Percent)`;
     }
 
     var layout = {
