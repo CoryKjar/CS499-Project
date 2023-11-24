@@ -14,11 +14,11 @@ function loadDataAndParseCSV() {
         complete: function (results) {
             // Store the parsed data in the df variable
             df = results.data;
+            loadDataAndParseForecastCSV();
             populateDropdowns();
             updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
             colonyChangePlot(document.getElementById("colony-change-type").value);
-            loadDataAndParseForecastCSV();
         }
     });
 
