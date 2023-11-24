@@ -21,13 +21,13 @@ function loadDataAndParseCSV(file, callback) {
 // Function to load both "data.csv" and "forecast-data.csv"
 function loadAllData() {
     // Load "data.csv"
-    loadDataAndParseCSV("data.csv", function (df) {
+    loadDataAndParseCSV("data.csv", function (data) {
         df = data;
         checkBothFilesLoaded();
     });
 
     // Load "forecast-data.csv"
-    loadDataAndParseCSV("forecast-data.csv", function (forecast_df) {
+    loadDataAndParseCSV("forecast-data.csv", function (forecastData) {
         forecast_df = forecastData;
         checkBothFilesLoaded();
     });
