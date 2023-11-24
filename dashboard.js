@@ -60,7 +60,16 @@ function populateDropdowns() {
         option.value = state;
         option.text = state;
         stateDropdown.appendChild(option);
-        forecastStateDropdown.append(option)
+    });
+
+    var uniqueForecastStates = [...new Set(forecastData.map(row => row.State))];
+
+    // Add states to the state dropdown
+    uniqueForecastStates.forEach(function (state) {
+        var option = document.createElement("option");
+        option.value = state;
+        option.text = state;
+        forecastStateDropdown.appendChild(option);
     });
 
     // Get variable names
@@ -85,6 +94,7 @@ function populateDropdowns() {
 
     // Initialize the plot with default values
     updateLinePlot();
+    updateForecastPlot();
 }
 
 // Function to update the line plot
@@ -329,7 +339,7 @@ function updateForecastPlot() {
     });
 
     var yForecast = forecastDataState.map(function (row) {
-        return row.ForecastVariable; // Replace 'ForecastVariable' with the actual variable name in your forecast data
+        return row.Forecast; // Replace 'ForecastVariable' with the actual variable name in your forecast data
     });
 
     // Create a Plotly line plot for the forecast
