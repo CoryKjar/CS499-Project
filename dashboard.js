@@ -339,7 +339,7 @@ function updateForecastPlot() {
     });
 
     var yForecast = forecast_df_state.map(function (row) {
-        return row[Forecast]; // Use the appropriate variable for the forecast
+        return row['Forecast']; // Use the appropriate variable for the forecast
     });
 
     // Create a Plotly line plot for the forecast
