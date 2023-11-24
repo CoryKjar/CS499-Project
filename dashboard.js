@@ -42,17 +42,20 @@ function checkBothFilesLoaded() {
         updateTimeFrames();
         updateBarChart();
         colonyChangePlot(document.getElementById("colony-change-type").value);
+        updateForecastPlot();
     }
 }
 
 // Function to populate state and variable dropdowns
 function populateDropdowns() {
     var stateDropdown = document.getElementById("state-dropdown");
+    var forecastStateDropdown = document.getElementById('forecast-state-dropdown');
     var yVariableDropdown = document.getElementById("y-variable-dropdown");
     var barChartVariableDropdown = document.getElementById("bar-chart-variable-dropdown");
 
     // Clear existing options
     stateDropdown.innerHTML = "";
+    forecastStateDropdown.innerHTML = "";
     yVariableDropdown.innerHTML = "";
     barChartVariableDropdown.innerHTML = "";
 
@@ -65,6 +68,7 @@ function populateDropdowns() {
         option.value = state;
         option.text = state;
         stateDropdown.appendChild(option);
+        forecastStateDropdown.appendChild(option);
     });
 
     // Get variable names
@@ -319,6 +323,52 @@ function colonyChangePlot() {
 }
 
 
+// Function to update the forecast plot
+function updateForecastPlot() {
+    var forecastStateDropdown = document.getElementById("forecast-state-dropdown");
+    var selectedForecastState = forecastStateDropdown.value;
+
+    // Filter the forecast data for the selected state
+    var forecast_df_state = forecast_df.filter(function (row) {
+        return row.State === selectedForecastState;
+    });
+
+    // Extract x and y data
+    var xForecast = forecast_df_state.map(function (row) {
+        return row.Quarter;
+    });
+
+    var yForecast = forecast_df_state.map(function (row) {
+        return row[selectedVariable]; // Use the appropriate variable for the forecast
+    });
+
+    // Create a Plotly line plot for the forecast
+    var traceForecast = {
+        x: xForecast,
+        y: yForecast,
+        mode: 'lines',
+        name: selectedVariable, // Use the appropriate variable name
+    };
+
+    var dataForecast = [traceForecast];
+
+    var layoutForecast = {
+        title: `${selectedVariable} Forecast Over Time in ${selectedForecastState}`,
+        xaxis: {
+            title: 'Quarter',
+            tickangle: -45,
+        },
+        yaxis: {
+            title: selectedVariable, // Use the appropriate variable name
+        },
+    };
+
+    // Update the "forecast-plot" div with the forecast line plot
+    Plotly.purge('forecast-plot');
+    Plotly.newPlot('forecast-plot', dataForecast, layoutForecast);
+}
+
+
 // Event listener for the state dropdown
 var stateDropdown = document.getElementById("state-dropdown");
 stateDropdown.addEventListener("change", updateLinePlot);
@@ -356,6 +406,9 @@ timeFrameSelector.addEventListener("change", function () {
     selectedTimeFrame = timeFrameSelector.value;
     updateBarChart();
 });
+
+var forecastStateDropdown = document.getElementById("forecast-state-dropdown");
+forecastStateDropdown.addEventListener("change", updateForecastPlot);
 
 // Load CSV data and parse it when the page loads
 loadAllData();
