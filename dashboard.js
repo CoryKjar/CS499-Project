@@ -18,6 +18,7 @@ function loadDataAndParseCSV() {
             updateTimeFrames(); // Call updateTimeFrames when data is loaded
             updateBarChart(); // Call updateBarChart when data is loaded
             colonyChangePlot(document.getElementById("colony-change-type").value);
+            loadDataAndParseForecastCSV();
         }
     });
 
