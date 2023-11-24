@@ -302,7 +302,7 @@ function colonyChangePlot() {
                 color: 'blue' // Change the color as needed
             }
         }];
-        title = `States With ${mostLostorGained} in Colonies (Value)`;
+        title = `States With ${mostLostOrGained} in Colonies (Value)`;
     } else if (selectedType === "percent") {
         var pctLost = top_5_states.map(row => row.pct_lost);
         data = [{
@@ -313,7 +313,7 @@ function colonyChangePlot() {
                 color: 'green' // Change the color as needed
             }
         }];
-        title = `States With ${mostLostorGained} in Colonies (Percent)`;
+        title = `States With ${mostLostOrGained} in Colonies (Percent)`;
     }
 
     var layout = {
