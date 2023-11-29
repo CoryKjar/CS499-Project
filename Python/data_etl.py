@@ -59,7 +59,7 @@ def process_data(raw_data_path, output_folder):
     df = df[['Quarter'] + [col for col in df.columns if col != 'Quarter']]
 
     # Concatenate the new rows with the existing DataFrame
-    df = pd.concat([df, hawaii_df], ignore_index=True)
+
     # Calculate the sum of 'Max_Colonies' for each quarter for 'US TOTAL'
     quarterly_sums = df.groupby('Quarter')['Max_Colonies'].sum()
     for quarter, sum_value in quarterly_sums.items():
@@ -76,6 +76,8 @@ def process_data(raw_data_path, output_folder):
     # Calculate the percentage of colonies affected by Colony Collapse Disorder
     df['Pct_Affected_Colony_Collapse_Disorder'] = (df['Num_Affected_Colony_Collapse_Disorder'] / df['Max_Colonies']) * 100
     df = df.drop(columns=['Num_Affected_Colony_Collapse_Disorder', 'Period', 'Year'])
+
+    df = df.round(2)
 
     # Define file paths using the output folder
     file_path = os.path.join(output_folder, 'data.csv')
