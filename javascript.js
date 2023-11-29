@@ -21,7 +21,7 @@ $(document).ready(function() {
                         { data: 'Pct_Affected_Varroa_Mites', title: 'Pct Affected - Varroa Mites' },
                         { data: 'Num_Renovated', title: 'Num Renovated' },
                         { data: 'Pct_Renovated', title: 'Pct Renovated' },
-                        { data: 'Max_Colonies_Percent_Change', title: 'Max Colonies Percent Change' },
+                        { data: 'Max_Colonies_Pct_Change', title: 'Max Colonies Percent Change' },
                         { data: 'Pct_Affected_Colony_Collapse_Disorder', title: 'Pct Affected - Colony Collapse Disorder' }
                     ],
                     columnDefs: [
