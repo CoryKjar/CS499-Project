@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0; /* Set a background color */
+    background-color: #c0c0c0; /* Set a background color */
 }
 
 /* Header styles */
@@ -47,7 +47,12 @@ header p {
     flex-direction: column;
     justify-content: space-between; /* Align items to the bottom */
     align-items: center;
-    background-color: #fff; /* Set a background color for the plot container */
+    background-color: #c0c0c0; /* Set a background color for the plot container */
+    border-color: BLACK;
+}
+
+.plot-container.plotly{
+    border: none;
 }
 
 /* Style for labels */
@@ -69,7 +74,7 @@ select {
     width: 100%;
     min-height: 400px;
     /* Add other CSS styles for the plots as needed */
-    background-color: #fff; /* Set a background color for the plot */
+    background-color: #c0c0c0; /* Set a background color for the plot */
     border: 1px solid #ccc;
 }
 
