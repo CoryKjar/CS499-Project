@@ -58,7 +58,6 @@ def process_data(raw_data_path, output_folder):
     # Drop unnecessary columns
     df = df[['Quarter'] + [col for col in df.columns if col != 'Quarter']]
 
-    # Concatenate the new rows with the existing DataFrame
 
     # Calculate the sum of 'Max_Colonies' for each quarter for 'US TOTAL'
     quarterly_sums = df.groupby('Quarter')['Max_Colonies'].sum()
@@ -76,6 +75,8 @@ def process_data(raw_data_path, output_folder):
     # Calculate the percentage of colonies affected by Colony Collapse Disorder
     df['Pct_Affected_Colony_Collapse_Disorder'] = (df['Num_Affected_Colony_Collapse_Disorder'] / df['Max_Colonies']) * 100
     df = df.drop(columns=['Num_Affected_Colony_Collapse_Disorder', 'Period', 'Year'])
+
+    df = df[~((df['State'] == 'HAWAII') & (df['Quarter'].isin(['2022_Q1', '2022_Q2'])))]
 
     df = df.round(2)
 
