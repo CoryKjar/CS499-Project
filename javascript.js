@@ -1,11 +1,9 @@
 $(document).ready(function() {
-    $.get("data.csv", function(data) {
+    $.get("Data/data.csv", function(data) {
         Papa.parse(data, {
             header: true,  // Treat the first row as the header
             dynamicTyping: true,  // Automatically detect data types
             complete: function(results) {
-                console.log(results.data[1513]);
-                console.log(results.data[1513].State);
                 // Populate the DataTable with parsed CSV data
                 $('#csvTable').DataTable({
                     data: results.data,
@@ -23,7 +21,7 @@ $(document).ready(function() {
                         { data: 'Pct_Affected_Varroa_Mites', title: 'Pct Affected - Varroa Mites' },
                         { data: 'Num_Renovated', title: 'Num Renovated' },
                         { data: 'Pct_Renovated', title: 'Pct Renovated' },
-                        { data: 'Max_Colonies_Percent_Change', title: 'Max Colonies Percent Change' },
+                        { data: 'Max_Colonies_Pct_Change', title: 'Max Colonies Percent Change' },
                         { data: 'Pct_Affected_Colony_Collapse_Disorder', title: 'Pct Affected - Colony Collapse Disorder' }
                     ],
                     columnDefs: [
