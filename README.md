@@ -1,5 +1,8 @@
 # Honey Bee Population Analysis and Forecasting Dashboard
 
+## Dashboard can be viewed at:
+https://corykjar.github.io/CS499-Project/index.html
+
 ## Overview
 
 This project aims to address the critical issue of honey bee population decline by providing a comprehensive analysis and forecasting tool. The Honey Bee Population Analysis and Forecasting Dashboard offer insights into honey bee population trends, affecting factors, and forecasts. The dashboard targets beekeepers, conservationists, and policymakers, enabling them to make informed decisions based on data analysis.
