@@ -236,6 +236,7 @@ function colonyChangePlot() {
     console.log("colonyChangePlot function called");
 
     var mostLostOrGained = document.getElementById("most-lost-or-gained").value;
+    console.log(mostLostOrGained);
     var selectedType = document.getElementById("colony-change-type").value;
     console.log("Selected options:", mostLostOrGained, selectedType);
 
