@@ -270,7 +270,7 @@ function colonyChangePlot() {
 // Sort the data based on selectedType and mostLostOrGained
     if (selectedType === "percent") {
         merged_df.sort((a, b) => {
-            if (mostLostOrGained === "most-gained") {
+            if (mostLostOrGained === "Most Gained") {
                 return b.pct_lost - a.pct_lost; // Sort by highest percent
             } else {
                 return a.pct_lost - b.pct_lost; // Sort by lowest percent
@@ -278,7 +278,7 @@ function colonyChangePlot() {
         });
     } else { // Default sorting for "value"
         merged_df.sort((a, b) => {
-            if (mostLostOrGained === "most-gained") {
+            if (mostLostOrGained === "Most Gained") {
                 return b.colony_diff - a.colony_diff; // Sort by highest colony_diff
             } else {
                 return a.colony_diff - b.colony_diff; // Sort by lowest colony_diff
