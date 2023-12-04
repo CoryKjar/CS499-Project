@@ -267,22 +267,26 @@ function colonyChangePlot() {
     }
 
     // Sort the data based on selectedType and mostLostOrGained
+// Sort the data based on selectedType and mostLostOrGained
     if (selectedType === "percent") {
         merged_df.sort((a, b) => {
-            if (mostLostOrGained === "Most Gained") {
+            if (mostLostOrGained === "most-gained") {
                 return b.pct_lost - a.pct_lost; // Sort by highest percent
             } else {
                 return a.pct_lost - b.pct_lost; // Sort by lowest percent
             }
         });
     } else { // Default sorting for "value"
-        merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
-
-        if (mostLostOrGained === "Most Lost") {
-            merged_df.reverse();
-        }
+        merged_df.sort((a, b) => {
+            if (mostLostOrGained === "most-gained") {
+                return b.colony_diff - a.colony_diff; // Sort by highest colony_diff
+            } else {
+                return a.colony_diff - b.colony_diff; // Sort by lowest colony_diff
+            }
+        });
     }
 
+    
     // Select the top 5 states with the highest decrease or increase in colonies
     var top_5_states = merged_df.slice(0, 5);
     top_5_states.forEach(row => row.colony_diff = Math.abs(row.colony_diff));
