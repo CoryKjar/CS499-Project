@@ -277,7 +277,7 @@ function colonyChangePlot() {
     } else { // Default sorting for "value"
         merged_df.sort((a, b) => a.colony_diff - b.colony_diff);
 
-        if (mostLostOrGained === "most-gained") {
+        if (mostLostOrGained === "most-lost") {
             merged_df.reverse();
         }
     }
